@@ -2,7 +2,7 @@
 name = "grimoire"
 version = "0.1.0"
 description = "Add your description here"
-license = ""
+license = "MIT"
 readme = "README.md"
 requires-python = ">=3.12"
 
@@ -15,6 +15,8 @@ dev = [
     "coverage[toml]>=7.6.12",
     "mypy>=1.15.0",
     "poethepoet>=0.32.2",
+    "pylint>=3.3.4",
+    "pylint-junit>=0.3.5",
     "pytest>=8.3.4",
     "pytest-clarity>=1.0.1",
     "pytest-cov>=6.0.0",
@@ -31,6 +33,13 @@ lint = {shell = "ruff check && pytest --dead-fixtures"}
 types = {shell = "mypy ."}
 test = {shell = "pytest"}
 all = {shell = "poe format && poe lint && poe types && poe test"}
+
+[tool.poe.tasks.pylint]
+shell = "pylint -j 0 --recursive=y --output-format=${output_format} ${extra} ."
+args = [
+  { name = "output_format", options = ["--output-format"], default = "text" },
+  { name = "extra", options = ["--extra"], default = "" }
+]
 
 [tool.mypy]
 ignore_missing_imports = true

@@ -1,9 +1,13 @@
 .idea/
 .vscode/
 
+__pycache__
+.cache
+
 .pytest_cache
 .ruff_cache
 .venv
 .coverage
 coverage.xml
 junit.xml
+pylint_results.xml
