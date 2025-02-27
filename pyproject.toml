@@ -1,0 +1,68 @@
+[project]
+name = "grimoire"
+version = "0.1.0"
+description = "Add your description here"
+license = ""
+readme = "README.md"
+requires-python = ">=3.12"
+
+dependencies = [
+]
+
+[dependency-groups]
+dev = [
+    "commitizen>=4.2.2",
+    "coverage[toml]>=7.6.12",
+    "mypy>=1.15.0",
+    "poethepoet>=0.32.2",
+    "pytest>=8.3.4",
+    "pytest-clarity>=1.0.1",
+    "pytest-cov>=6.0.0",
+    "pytest-deadfixtures>=2.2.1",
+    "ruff>=0.9.8",
+]
+
+[project.urls]
+repository = "https://github.com/BDP25/grimoire"
+
+[tool.poe.tasks]
+format = {shell = "ruff format && ruff check --fix"}
+lint = {shell = "ruff check && pytest --dead-fixtures"}
+types = {shell = "mypy ."}
+test = {shell = "pytest"}
+all = {shell = "poe format && poe lint && poe types && poe test"}
+
+[tool.mypy]
+ignore_missing_imports = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+disallow_untyped_calls = true
+exclude = [".venv/", "tests/", "conftest.py"]
+
+[tool.pytest.ini_options]
+addopts = "--cov . --cov-report term --cov-report html --cov-report xml --junitxml junit.xml"
+filterwarnings = "ignore"
+junit_family = "xunit2"
+
+[tool.coverage.run]
+omit = [".venv/*"]
+
+[tool.ruff]
+extend-exclude = ["**/migrations"]
+
+[tool.ruff.lint]
+extend-ignore = ["E501"]
+select = [
+  # pycodestyle
+  "E",
+  # Pyflakes
+  "F",
+  # pyupgrade
+  "UP",
+  # flake8-bugbear
+  "B",
+  # flake8-simplify
+  "SIM",
+  # isort
+  "I",
+]

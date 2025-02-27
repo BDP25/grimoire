@@ -1,0 +1,9 @@
+.idea/
+.vscode/
+
+.pytest_cache
+.ruff_cache
+.venv
+.coverage
+coverage.xml
+junit.xml
