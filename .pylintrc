@@ -1,0 +1,43 @@
+[MAIN]
+
+ignore=
+    .venv,
+    .git,
+    .pytest_cache,
+    .mypy_cache,
+
+ignore-paths=
+    ^.*/__pycache__/.*$,
+    ^.*/tests/.*$,
+
+load-plugins=
+    pylint.extensions.check_elif,
+    pylint.extensions.bad_builtin,
+    pylint.extensions.docparams,
+    pylint.extensions.for_any_all,
+    pylint.extensions.set_membership,
+    pylint.extensions.code_style,
+    pylint.extensions.overlapping_exceptions,
+    pylint.extensions.typing,
+    pylint.extensions.redefined_variable_type,
+    pylint.extensions.comparison_placement,
+    pylint.extensions.mccabe,
+    # Additional plugins to use
+    pylint_junit,
+
+[MESSAGES CONTROL]
+
+disable=
+    unused-import, # already covered by flake8 (ruff)
+    missing-docstring,
+    unused-argument,
+    invalid-name,
+    format, # ignore formatting issues handled by ruff
+    unused-wildcard-import, # we need some wildcards for tasks, signals, etc.
+    too-many-ancestors, # no strict requirements on the min/max numbers of methods, args, etc.
+    too-few-public-methods,
+    too-many-arguments,
+    too-many-locals,
+    too-many-instance-attributes,
+    redefined-outer-name,
+    import-outside-toplevel
