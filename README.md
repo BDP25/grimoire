@@ -26,6 +26,40 @@ Grimoire (gʀiˈmwaːʀ), a book of magical knowledge
 
 ## Usage
 
+First create a new Gemini API key in the [Google AI Studio](https://aistudio.google.com/app/apikey) and save it as `LLM_API_KEY` in your environment.
+
+```shell
+export LLM_API_KEY=<your-api-key>
+```
+
+Then you can use the `grim` client to interact with grimoire.
+
+```shell
+# with the uv project context
+uv run grim --help
+
+# or if you have installed the package
+grim --help
+```
+
+```text
+ Usage: grim [OPTIONS] COMMAND [ARGS]...
+
+ A cli which enables RAG for your code 🔮
+
+╭─ Options ────────────────────────────────────────────────────────────╮
+│ --help          Show this message and exit.                          │
+╰──────────────────────────────────────────────────────────────────────╯
+╭─ Commands ───────────────────────────────────────────────────────────╮
+│ init      Initialize a new grimoire project.                         │
+│ add       Add a new dependency or document to the project            │
+│ sync      Sync the grimoire project with existing configuration      │
+│ ask       Ask a question to the grimoire                             │
+│ help      Show this message and exit                                 │
+│ version   Show version and exit                                      │
+╰──────────────────────────────────────────────────────────────────────╯
+```
+
 ### Development
 
 The project is using [uv](https://docs.astral.sh/uv/) as the python project manager. In addition [Poe the Poet](https://poethepoet.natn.io/index.html) is used to run
@@ -50,6 +84,8 @@ uv run poe test    # run tests
 ```
 
 ## License
+
+Distributed under the MIT License. See [LICENSE.md](LICENSE.md) for more information.
 
 ## Contributors
 
