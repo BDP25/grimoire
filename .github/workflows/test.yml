@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Lint code
+      - name: Run pytest
         run: uv run poe test
       - name: Upload test coverage
         uses: actions/upload-artifact@v4
