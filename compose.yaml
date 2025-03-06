@@ -1,0 +1,15 @@
+name: grimoire
+services:
+  pgvector:
+    image: pgvector/pgvector:0.8.0-pg17
+    environment:
+      POSTGRES_USER: pgvector
+      POSTGRES_PASSWORD: pgvector
+      POSTGRES_DB: pgvector
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgvector_data:/var/lib/postgresql/data
+
+volumes:
+  pgvector_data:
