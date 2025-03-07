@@ -4,6 +4,8 @@ import typer
 from google import genai
 from typer.main import get_command
 
+from grimoire.configuration import ProjectConfiguration
+
 CLI_NAME = "grimoire"
 
 cli = typer.Typer(
@@ -19,6 +21,20 @@ def init() -> None:
     Initialize a new grimoire project.
     """
     typer.echo("Initializing new grimoire project")
+
+
+@cli.command()
+def verify() -> None:
+    """
+    Verify the configuration of the project
+    """
+    if not os.path.exists("grimoire.yaml"):
+        typer.echo("No configuration file found. Please run `grim init` first.")
+        raise typer.Exit(code=1)
+    typer.echo("Verifying configuration")
+    config = ProjectConfiguration.load_from_yaml()
+    prefix = typer.style("Successful for", fg=typer.colors.GREEN, bold=True)
+    typer.echo(f"{prefix}: {config.name}")
 
 
 @cli.command()

@@ -1,0 +1,21 @@
+name: grimoire
+db:
+  host: localhost
+  port: 5432
+  user: pgvector
+  password: pgvector
+docs:
+  - site_url: https://numpy.org/doc/stable/
+    url: https://github.com/numpy/numpy
+  - site_url: https://pandas.pydata.org/docs/
+    url: https://github.com/pandas-dev/pandas
+    exclude:
+     - 'doc/.gitignore'
+     - 'doc/redirects.csv'
+     - 'doc/scripts/*'
+     - 'doc/cheatsheet/*'
+    include:
+      - 'doc'
+code:
+  - url: https://github.com/pandas-dev/pandas
+    path: pandas

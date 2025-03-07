@@ -25,6 +25,7 @@ dev = [
     "pytest-cov>=6.0.0",
     "pytest-deadfixtures>=2.2.1",
     "ruff>=0.9.8",
+    "types-pyyaml>=6.0.12.20241230",
 ]
 
 [project.scripts]
