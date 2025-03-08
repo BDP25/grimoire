@@ -44,7 +44,7 @@ format = {shell = "ruff format && ruff check --fix"}
 lint = {shell = "ruff check && pytest --dead-fixtures"}
 types = {shell = "mypy ."}
 test = {shell = "pytest"}
-all = {shell = "poe format && poe lint && poe types && poe test"}
+all = {shell = "poe format && poe lint && poe types && poe test && poe pylint"}
 
 [tool.poe.tasks.pylint]
 shell = "pylint -j 0 --recursive=y --output-format=${output_format} ${extra} ."
