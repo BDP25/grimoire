@@ -32,6 +32,12 @@ First create a new Gemini API key in the [Google AI Studio](https://aistudio.goo
 export LLM_API_KEY=<your-api-key>
 ```
 
+Start the local pgvector database:
+
+```shell
+docker compose up -d
+```
+
 Then you can use the `grim` client to interact with grimoire.
 
 ```shell
@@ -45,19 +51,22 @@ grim --help
 ```text
  Usage: grim [OPTIONS] COMMAND [ARGS]...
 
- A cli which enables RAG for your code 🔮
+ A cli which enables RAG for your project 🔮
+ Prequsites:
+ - Get an LLM API token (e.g. from https://aistudio.google.com/app/apikey)
+ - Set the LLM_API_TOKEN environment variable to the token
 
-╭─ Options ────────────────────────────────────────────────────────────╮
-│ --help          Show this message and exit.                          │
-╰──────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────╮
-│ init      Initialize a new grimoire project.                         │
-│ add       Add a new dependency or document to the project            │
-│ sync      Sync the grimoire project with existing configuration      │
-│ ask       Ask a question to the grimoire                             │
-│ help      Show this message and exit                                 │
-│ version   Show version and exit                                      │
-╰──────────────────────────────────────────────────────────────────────╯
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help          Show this message and exit.                                  │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ───────────────────────────────────────────────────────────────────╮
+│ version                                                                      │
+│ ask       Ask a question with project context                                │
+│ sync      Sync the grimoire project with existing configuration              │
+│ verify    Verify the configuration of the project                            │
+│ add       Add a new dependency or document to the project                    │
+│ init      Initialize a new grimoire project                                  │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```
 
 ### Development
