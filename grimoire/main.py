@@ -10,6 +10,10 @@ from grimoire.verify import verify_cli
 CLI_NAME = "grimoire"
 DESCRIPTION = """
 A cli which enables RAG for your project 🔮
+
+Prequsites:\n
+- Get an LLM API token (e.g. from https://aistudio.google.com/app/apikey)\n
+- Set the LLM_API_TOKEN environment variable to the token\n
 """
 
 cli = typer.Typer(
