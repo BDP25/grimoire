@@ -40,4 +40,5 @@ disable=
     too-many-locals,
     too-many-instance-attributes,
     redefined-outer-name,
-    import-outside-toplevel
+    import-outside-toplevel,
+    fixme
