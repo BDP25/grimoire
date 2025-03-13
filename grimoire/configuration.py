@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import yaml
-from pydantic import BaseModel, HttpUrl
+from pydantic import BaseModel
 
 CONFIG_FILE_NAME = "grimoire.yaml"
 
@@ -28,13 +28,13 @@ class DBConfiguration(BaseModel):
 
 
 class CodeSource(BaseModel):
-    url: HttpUrl
+    url: str
     path: str | None
 
 
 class DocumentSource(BaseModel):
-    url: HttpUrl
-    site_url: HttpUrl
+    url: str
+    site_url: str
     exclude: list[str] | None = None
     include: list[str] | None = None
 
