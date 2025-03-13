@@ -6,6 +6,16 @@ from pydantic import BaseModel, HttpUrl
 CONFIG_FILE_NAME = "grimoire.yaml"
 
 
+# see: https://stackoverflow.com/questions/25108581/python-yaml-dump-bad-indentation
+class YamlDumper(yaml.Dumper):
+    """
+    Custom Yaml dumper for list indentation
+    """
+
+    def increase_indent(self, flow: bool = False, indentless: bool = False) -> None:
+        return super().increase_indent(flow, False)
+
+
 class DBConfiguration(BaseModel):
     """
     TODO: store password in a secure way!
@@ -42,4 +52,6 @@ class ProjectConfiguration(BaseModel):
 
     def save_to_yaml(self, file_path: Path) -> None:
         with open(file_path, "w", encoding="utf-8") as f:
-            yaml.dump(self.model_dump(), f, sort_keys=False)
+            yaml.dump(
+                data=self.model_dump(), stream=f, Dumper=YamlDumper, sort_keys=False
+            )
