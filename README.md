@@ -4,7 +4,7 @@
 </a>
 <h3 align="center">grimoire</h3>
 <p align="center">
-Grimoire (gʀiˈmwaːʀ), a book of magical knowledge
+Grimoire (gʀiˈmwaːʀ), a book (tool) of magical knowledge about your code and its dependencies.
 <br/>
 </p>
 </div>
@@ -23,6 +23,17 @@ Grimoire (gʀiˈmwaːʀ), a book of magical knowledge
 - [Contributors](#contributors)
 
 ## About the Project
+
+Ever joined a new software project with an unfamiliar tech stack? You’re faced with internal libraries, legacy code, scattered documentation, and dependency-breaking
+changes. Typically, you’d rely on docs, Stack Overflow, code exploration, and now LLMs like ChatGPT. But these tools don’t fully understand your project’s
+context—frustrating, right?
+
+That’s why we built Grimoire. It’s a powerful client tool that leverages RAG (Retrieval-Augmented Generation) to deeply understand your code, documentation,
+dependencies, and project structure. Grimoire acts as your personal AI assistant, helping you onboard faster, develop smarter, and navigate your project with ease.
+
+- 🔍 Deep Code Understanding – Grimoire analyzes your entire codebase for better insights.
+- 📚 Seamless Documentation Access – No more searching; get the right info instantly.
+- 🧩 Smart Dependency Mapping – Know how everything connects in your project.
 
 ## Usage
 
@@ -83,6 +94,9 @@ uv sync
 # install a package
 uv add <package>
 uv add <package> --dev
+
+# run a script
+uv run python sandbox/text_ingestion.py
 
 # run poe tasks
 uv run poe all     # run all tasks
