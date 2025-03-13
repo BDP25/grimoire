@@ -4,11 +4,38 @@ import typer
 
 from grimoire.configuration import (
     CONFIG_FILE_NAME,
+    CodeSource,
     DBConfiguration,
+    DocumentSource,
     ProjectConfiguration,
 )
 
 init_cli = typer.Typer()
+
+DUMMY_DOCS = [
+    DocumentSource(
+        site_url="https://numpy.org/doc/stable/",
+        url="https://github.com/numpy/numpy",
+    ),
+    DocumentSource(
+        site_url="https://pandas.pydata.org/docs/",
+        url="https://github.com/pandas-dev/pandas",
+        exclude=[
+            "doc/.gitignore",
+            "doc/redirects.csv",
+            "doc/scripts/*",
+            "doc/cheatsheet/*",
+        ],
+        include=["doc"],
+    ),
+]
+
+DUMMY_CODE = [
+    CodeSource(
+        url="https://github.com/pandas-dev/pandas",
+        path="pandas",
+    )
+]
 
 
 @init_cli.command("init", help="Initialize a new grimoire project")
@@ -43,5 +70,7 @@ def init(
             user=db_user,
             password=db_password,
         ),
+        docs=DUMMY_DOCS,
+        code=DUMMY_CODE,
     ).save_to_yaml(file_path)
     typer.echo(f"Configuration saved at {file_path}")
