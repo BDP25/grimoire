@@ -1,49 +1,42 @@
-import os
-from langchain.document_loaders import TextLoader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-import nltk
-from nltk.stem import PorterStemmer
-from nltk.tokenize import word_tokenize
-from langchain.schema import Document  
+from typing import cast
 
-# Load the Markdown document as text
-current_wd = os.getcwd()
-file_directory = os.path.join(current_wd, "files")
-
-def load_markdown_files(directory):
-    """Loads all Markdown files from a given directory"""
-    files_content = []
-    for filename in os.listdir(directory):
-        if filename.endswith(".md"):
-            file_path = os.path.join(directory, filename)
-            with open(file_path, 'r', encoding='utf-8') as file:
-                files_content.append(file.read())
-    return files_content
-
-# Load all Markdown files
-raw_documents = load_markdown_files(file_directory)
-
-# Convert the read strings into langchain Document objects
-documents = [Document(page_content=doc) for doc in raw_documents]
-
-# Split the text into smaller chunks
-text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=20)
-split_texts = text_splitter.split_documents(documents)
-
-# NLTK Tokenization and Stemming
-nltk.download('punkt')  # Ensures that the punkt module for tokenization is available - divides a text into a list of sentences by using an unsupervised algorithm
-stemmer = PorterStemmer()
-
-def tokenize_and_stem(text):
-    # Tokenize the text
-    tokens = word_tokenize(text)
-    # Apply stemming to the tokens
-    stemmed_tokens = [stemmer.stem(word) for word in tokens]
-    return " ".join(stemmed_tokens)
-
-# Apply tokenization and stemming to the texts
-processed_texts = [tokenize_and_stem(text.page_content) for text in split_texts]
+from helpers import clear_vectorstore, setup_vectorstore
+from langchain_community.document_loaders import (
+    DirectoryLoader,
+    TextLoader,
+)
+from langchain_postgres import PGVector
+from langchain_text_splitters.markdown import (
+    MarkdownHeaderTextSplitter,
+    RecursiveCharacterTextSplitter,
+)
 
 
-# TODO: ingest into pgvector database
+def ingest_text() -> None:
+    clear_vectorstore()
+    data = DirectoryLoader(path="files", glob="*.md", loader_cls=TextLoader).load()
 
+    splits = []
+    md_splitter = MarkdownHeaderTextSplitter(
+        headers_to_split_on=[
+            ("#", "Heading1"),
+            ("##", "Heading2"),
+            ("###", "Heading3"),
+        ],
+        strip_headers=True,
+    )
+
+    for document in data:
+        for split in md_splitter.split_text(document.page_content):
+            splits.append(split)
+
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=512, chunk_overlap=128)
+    chunks = text_splitter.split_documents(splits)
+
+    vectorstore = setup_vectorstore("sandbox_text")
+    vectorstore = cast(PGVector, vectorstore)  # hack to avoid mypy error
+    vectorstore.add_documents(chunks)
+
+
+if __name__ == "__main__":
+    ingest_text()
