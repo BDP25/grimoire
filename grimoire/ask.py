@@ -4,6 +4,8 @@ import typer
 from langchain.chat_models import init_chat_model
 from langchain.chat_models.base import BaseChatModel
 
+from grimoire.helpers import blue_text, red_text
+
 ask_cli = typer.Typer()
 
 
@@ -28,12 +30,10 @@ def get_llm_client() -> BaseChatModel:
 
 @ask_cli.command("ask", help="Ask a question with project context")
 def ask(question: list[str]) -> None:
-    question_prefix = typer.style("Question", fg=typer.colors.BLUE, bold=True)
-    answer_prefix = typer.style("Answer", fg=typer.colors.RED, bold=True)
-    typer.echo(f"{question_prefix}: {' '.join(question)}")
+    typer.echo(f"{blue_text('Question: ')}{' '.join(question)}")
 
     client = get_llm_client()
     response = client.stream(" ".join(question))
-    typer.echo(f"{answer_prefix}: ", nl=False)
+    typer.echo(f"{red_text('Answer: ')}", nl=False)
     for chunk in response:
         typer.echo(chunk.content, nl=False)
