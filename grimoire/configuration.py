@@ -3,6 +3,8 @@ from pathlib import Path
 import yaml
 from pydantic import BaseModel, HttpUrl
 
+CONFIG_FILE_NAME = "grimoire.yaml"
+
 
 class DBConfiguration(BaseModel):
     """
@@ -34,10 +36,10 @@ class ProjectConfiguration(BaseModel):
     code: list[CodeSource] | None = None
 
     @classmethod
-    def load_from_yaml(cls, path: Path = Path.cwd()) -> "ProjectConfiguration":  # noqa: B008
-        with open(path / "grimoire.yaml", encoding="utf-8") as f:
+    def load_from_yaml(cls, file_path: Path) -> "ProjectConfiguration":  # noqa: B008
+        with open(file_path, encoding="utf-8") as f:
             return cls.model_validate(yaml.safe_load(f))
 
-    def save_to_yaml(self, path: Path) -> None:
-        with open(path / "grimoire.yaml", "w", encoding="utf-8") as f:
+    def save_to_yaml(self, file_path: Path) -> None:
+        with open(file_path, "w", encoding="utf-8") as f:
             yaml.dump(self.model_dump(), f, sort_keys=False)

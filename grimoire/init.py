@@ -2,7 +2,11 @@ from pathlib import Path
 
 import typer
 
-from grimoire.configuration import DBConfiguration, ProjectConfiguration
+from grimoire.configuration import (
+    CONFIG_FILE_NAME,
+    DBConfiguration,
+    ProjectConfiguration,
+)
 
 init_cli = typer.Typer()
 
@@ -14,15 +18,16 @@ def init(
         help="Path where grimoire project should be created",
     ),
 ) -> None:
-    if not path.exists():
+    file_path = path / CONFIG_FILE_NAME
+
+    if not path.is_dir():
         typer.echo(f"Error: Path {path} does not exist", err=True)
         raise typer.Exit(code=1)
-    if path / "grimoire.yaml":
-        overwrite = typer.confirm(
-            f"File {path / 'grimoire.yaml'} already exists. Overwrite?"
-        )
-        if not overwrite:
-            raise typer.Exit(code=0)
+    if file_path.exists() and not typer.confirm(
+        f"File {file_path} already exists. Overwrite?"
+    ):
+        typer.echo("Exiting without overwriting existing file")
+        raise typer.Exit(code=0)
 
     project_name = typer.prompt("Project name", default=path.name)
     db_host = typer.prompt("Database host", default="localhost")
@@ -38,5 +43,5 @@ def init(
             user=db_user,
             password=db_password,
         ),
-    ).save_to_yaml(path)
-    typer.echo(f"Configuration saved at {path / 'grimoire.yaml'}")
+    ).save_to_yaml(file_path)
+    typer.echo(f"Configuration saved at {file_path}")
