@@ -11,18 +11,28 @@ from langchain_text_splitters.markdown import (
     RecursiveCharacterTextSplitter,
 )
 
+TEXT_CHUNK_SIZE = 200
+TEXT_CHUNK_OVERLAP = 50     # 20 - 30% of chunk size
+HEADERS = [
+    ("#", "Heading 1"),
+    ("##", "Heading 2"),
+    ("###", "Heading 3"),
+    ("####", "Heading 4"),
+    ("#####", "Heading 5"),
+]
 
 def ingest_text() -> None:
     clear_vectorstore()
-    data = DirectoryLoader(path="files", glob="*.md", loader_cls=TextLoader).load()
+    data = DirectoryLoader(
+    path="files", 
+    glob="*.md", 
+    loader_cls=lambda file_path: TextLoader(file_path, encoding="utf-8")
+    ).load()
+
 
     splits = []
     md_splitter = MarkdownHeaderTextSplitter(
-        headers_to_split_on=[
-            ("#", "Heading1"),
-            ("##", "Heading2"),
-            ("###", "Heading3"),
-        ],
+        headers_to_split_on=HEADERS,
         strip_headers=True,
     )
 
@@ -30,12 +40,12 @@ def ingest_text() -> None:
         for split in md_splitter.split_text(document.page_content):
             splits.append(split)
 
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=512, chunk_overlap=128)
-    chunks = text_splitter.split_documents(splits)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=TEXT_CHUNK_SIZE, chunk_overlap=TEXT_CHUNK_OVERLAP)
+    all_splits = text_splitter.split_documents(splits)
 
     vectorstore = setup_vectorstore("sandbox_text")
     vectorstore = cast(PGVector, vectorstore)  # hack to avoid mypy error
-    vectorstore.add_documents(chunks)
+    vectorstore.add_documents(all_splits)
 
 
 if __name__ == "__main__":
