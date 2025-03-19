@@ -11,8 +11,8 @@ from langchain_text_splitters.markdown import (
     RecursiveCharacterTextSplitter,
 )
 
-TEXT_CHUNK_SIZE = 200
-TEXT_CHUNK_OVERLAP = 50     # 20 - 30% of chunk size
+TEXT_CHUNK_SIZE = 1000
+TEXT_CHUNK_OVERLAP = 200     # 20 - 30% of chunk size
 HEADERS = [
     ("#", "Heading 1"),
     ("##", "Heading 2"),
