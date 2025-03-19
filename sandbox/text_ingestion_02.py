@@ -4,7 +4,7 @@ from helpers import clear_vectorstore, setup_vectorstore
 from langchain_community.document_loaders import (
     DirectoryLoader,
     TextLoader,
-    UnstructuredFileLoader
+    UnstructuredFileLoader,
 )
 from langchain_postgres import PGVector
 from langchain_text_splitters import (
@@ -22,6 +22,7 @@ HEADERS = [
     ("####", "Heading 4"),
     ("#####", "Heading 5"),
 ]
+
 
 def load_documents() -> list:
     file_types = ["*.txt", "*.md", "*.pdf", "*.docx"]
@@ -45,15 +46,17 @@ def ingest_text() -> None:
 
     # Markdown-Splitter
     splits = []
-    md_splitter = MarkdownHeaderTextSplitter(headers_to_split_on=HEADERS, strip_headers=True)
+    md_splitter = MarkdownHeaderTextSplitter(
+        headers_to_split_on=HEADERS, strip_headers=True
+    )
     for document in data:
         splits.extend(md_splitter.split_text(document.page_content))
 
-    # Recursive Character Splitter 
+    # Recursive Character Splitter
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=512,
         chunk_overlap=128,
-        separators=["\n\n", "\n", " "],  
+        separators=["\n\n", "\n", " "],
         length_function=len,
     )
     all_splits = text_splitter.split_documents(splits)
@@ -61,7 +64,7 @@ def ingest_text() -> None:
     # Ingest text into DB
     vectorstore = setup_vectorstore("sandbox_text")
     vectorstore = cast(PGVector, vectorstore)
-    vectorstore.add_documents(all_splits)  
+    vectorstore.add_documents(all_splits)
 
 
 if __name__ == "__main__":
