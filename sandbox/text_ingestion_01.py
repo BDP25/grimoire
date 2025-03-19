@@ -8,13 +8,14 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 TEXT_CHUNK_SIZE = 512
 TEXT_CHUNK_OVERLAP = 128  # 20 - 30% Overlap
 
+
 def ingest_text() -> None:
     clear_vectorstore()
 
     data = DirectoryLoader(
         path="files",
         glob="*.md",
-        loader_cls=lambda file_path: TextLoader(file_path, encoding="utf-8")
+        loader_cls=lambda file_path: TextLoader(file_path, encoding="utf-8"),
     ).load()
 
     # Split Text in Chunks
@@ -28,12 +29,13 @@ def ingest_text() -> None:
     for document in data:
         splits.extend(char_splitter.split_text(document.page_content))
 
-    documents = [Document(page_content=chunk) for chunk in splits]    
+    documents = [Document(page_content=chunk) for chunk in splits]
 
     # Ingest into DB
     vectorstore = setup_vectorstore("sandbox_text")
-    vectorstore = cast(PGVector, vectorstore)  
-    vectorstore.add_documents(documents)  
+    vectorstore = cast(PGVector, vectorstore)
+    vectorstore.add_documents(documents)
+
 
 if __name__ == "__main__":
     ingest_text()
