@@ -1,4 +1,5 @@
 from typing import cast
+
 from helpers import clear_vectorstore, setup_vectorstore
 from langchain_community.document_loaders import DirectoryLoader, TextLoader
 from langchain_core.documents import Document
@@ -15,7 +16,7 @@ def ingest_text() -> None:
     data = DirectoryLoader(
         path="files",
         glob="*.md",
-        loader_cls=lambda file_path: TextLoader(file_path, encoding="utf-8"),
+        loader_cls=TextLoader,
     ).load()
 
     # Split Text in Chunks
