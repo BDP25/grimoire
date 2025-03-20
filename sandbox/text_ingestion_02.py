@@ -29,10 +29,10 @@ def load_documents() -> list:
     data = []
 
     for file_type in file_types:
-        if file_type in ["*.pdf", "*.docx"]:
-            loader_cls = UnstructuredFileLoader
+        if file_type in {"*.pdf", "*.docx"}:
+            loader_cls = UnstructuredFileLoader  # type: ignore
         else:
-            loader_cls = lambda file_path: TextLoader(file_path, encoding="utf-8")
+            loader_cls = TextLoader  # type: ignore
 
         loader = DirectoryLoader(path="files", glob=file_type, loader_cls=loader_cls)
         data.extend(loader.load())

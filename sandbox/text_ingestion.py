@@ -12,7 +12,7 @@ from langchain_text_splitters.markdown import (
 )
 
 TEXT_CHUNK_SIZE = 512
-TEXT_CHUNK_OVERLAP = 128     # 20 - 30% of chunk size 
+TEXT_CHUNK_OVERLAP = 128  # 20 - 30% of chunk size
 HEADERS = [
     ("#", "Heading 1"),
     ("##", "Heading 2"),
@@ -21,14 +21,14 @@ HEADERS = [
     ("#####", "Heading 5"),
 ]
 
+
 def ingest_text() -> None:
     clear_vectorstore()
     data = DirectoryLoader(
-    path="files", 
-    glob="*.md", 
-    loader_cls=lambda file_path: TextLoader(file_path, encoding="utf-8")
+        path="files",
+        glob="*.md",
+        loader_cls=TextLoader,
     ).load()
-
 
     splits = []
     md_splitter = MarkdownHeaderTextSplitter(
@@ -40,7 +40,9 @@ def ingest_text() -> None:
         for split in md_splitter.split_text(document.page_content):
             splits.append(split)
 
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=TEXT_CHUNK_SIZE, chunk_overlap=TEXT_CHUNK_OVERLAP)
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=TEXT_CHUNK_SIZE, chunk_overlap=TEXT_CHUNK_OVERLAP
+    )
     all_splits = text_splitter.split_documents(splits)
 
     vectorstore = setup_vectorstore("sandbox_text")
