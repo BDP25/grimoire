@@ -326,6 +326,12 @@ wheels = [
 ]
 
 [[package]]
+name = "esprima"
+version = "4.0.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/cc/a1/50fccd68a12bcfc27adfc9969c090286670a9109a0259f3f70943390b721/esprima-4.0.1.tar.gz", hash = "sha256:08db1a876d3c2910db9cfaeb83108193af5411fc3a3a66ebefacd390d21323ee", size = 47021 }
+
+[[package]]
 name = "filelock"
 version = "3.17.0"
 source = { registry = "https://pypi.org/simple" }
@@ -509,6 +515,7 @@ name = "grimoire"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
+    { name = "esprima" },
     { name = "google-genai" },
     { name = "langchain", extra = ["community", "google-genai", "huggingface"] },
     { name = "langchain-postgres" },
@@ -537,6 +544,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "esprima", specifier = ">=4.0.1" },
     { name = "google-genai", specifier = ">=1.4.0" },
     { name = "langchain", extras = ["community", "huggingface", "google-genai"], specifier = ">=0.3.20" },
     { name = "langchain-postgres", specifier = ">=0.0.13" },
