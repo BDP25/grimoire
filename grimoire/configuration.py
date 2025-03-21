@@ -16,6 +16,13 @@ class YamlDumper(yaml.Dumper):
         return super().increase_indent(flow, False)
 
 
+class IngestionConfiguration(BaseModel):
+    text_chunk_size: int
+    text_chunk_overlap: int
+    code_chunk_size: int
+    code_chunk_overlap: int
+
+
 class DBConfiguration(BaseModel):
     """
     TODO: store password in a secure way!
@@ -41,6 +48,7 @@ class DocumentSource(BaseModel):
 
 class ProjectConfiguration(BaseModel):
     name: str
+    ingestion: IngestionConfiguration
     db: DBConfiguration
     docs: list[DocumentSource] | None = None
     code: list[CodeSource] | None = None
