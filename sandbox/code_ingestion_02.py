@@ -8,7 +8,7 @@ from langchain_postgres import PGVector
 from tree_sitter import Node
 from tree_sitter_languages import get_parser
 
-SUPPORTED_LANGUAGES = ["py", "js", "cpp", "java"]
+GLOB_PATTERNS = ["*.py", "*.js", "*.cpp", "*.java"]
 CHUNK_SIZE = 512
 CHUNK_OVERLAP = 128
 
@@ -51,7 +51,7 @@ def ingest_code() -> None:
 
     loader = DirectoryLoader(
         path="files",
-        glob=[f"*.{ext}" for ext in SUPPORTED_LANGUAGES],
+        glob=GLOB_PATTERNS,
         loader_cls=TextLoader,
     )
     data = loader.load()
