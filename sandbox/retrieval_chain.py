@@ -1,9 +1,7 @@
 import os
-from typing import Any, Dict, List, cast
-from operator import itemgetter
-from dotenv import load_dotenv
+from typing import Any
 
-from langchain_postgres import PGVector
+from dotenv import load_dotenv
 from langchain.memory import ConversationBufferMemory
 from langchain.prompts import (
     ChatPromptTemplate,
@@ -13,41 +11,48 @@ from langchain.prompts import (
 from langchain_core.messages import SystemMessage
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import (
-    RunnableLambda,
     RunnableParallel,
     RunnablePassthrough,
     RunnableSerializable,
 )
-from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
+from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
+from langchain_postgres import PGVector
+from pydantic import SecretStr
 
 # Load API key
 load_dotenv()
 
-PGVECTOR_CONNECTION_STRING = "postgresql+psycopg2://pgvector:pgvector@localhost:5432/pgvector"
+PGVECTOR_CONNECTION_STRING = (
+    "postgresql+psycopg2://pgvector:pgvector@localhost:5432/pgvector"
+)
 COLLECTION_NAME = "sandbox_text"
-LLM_API_KEY = os.getenv("LLM_API_KEY") 
+LLM_API_KEY = SecretStr(os.getenv("LLM_API_KEY"))  # type: ignore
 
 # Initialize Google Gemini embeddings
-embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001", google_api_key=LLM_API_KEY)
+embeddings = GoogleGenerativeAIEmbeddings(
+    model="models/embedding-001", google_api_key=LLM_API_KEY
+)
 
 
 # Connect to PGVector database
-def connect_pgvector():
+def connect_pgvector() -> PGVector:
     """Loads the existing PGVector vector store."""
     try:
         vectorstore = PGVector.from_existing_index(
-            embedding=embeddings,  
-            collection_name=COLLECTION_NAME,  
-            connection=PGVECTOR_CONNECTION_STRING, 
-            use_jsonb=True 
+            embedding=embeddings,
+            collection_name=COLLECTION_NAME,
+            connection=PGVECTOR_CONNECTION_STRING,
+            use_jsonb=True,
         )
     except Exception as e:
-        raise RuntimeError(f"Error connecting to PGVector: {e}")
-    
+        print(f"Error connecting to PGVector: {e}")
+        raise
+
     return vectorstore
 
+
 # System message for the AI assistant
-SYSTEM_MESSAGE = """Your name is grimoire. You are a conversational AI assistant. """ # TODO: add rules
+SYSTEM_MESSAGE = """Your name is grimoire. You are a conversational AI assistant. """  # TODO: add rules
 
 # Chat prompt template for the LLM
 PROMPT_TEMPLATE = """
@@ -59,22 +64,25 @@ Question: {question}
 Answer:
 """
 
+
 # Function to retrieve and manage chat history
-def get_chat_memory(messages: List[Dict[str, Any]]) -> ConversationBufferMemory:
+def get_chat_memory(messages: list[dict[str, Any]]) -> ConversationBufferMemory:
     """Retrieves chat history and stores previous conversations."""
     memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
     for msg in messages:
         memory.save_context({"input": msg["question"]}, {"output": msg["answer"]})
     return memory
 
+
 # Function to build the retrieval chain
-def build_chain(messages: List[Dict[str, Any]]) -> RunnableSerializable:
+def build_chain(messages: list[dict[str, Any]]) -> RunnableSerializable:
     """Creates a retrieval chain that retrieves documents and generates an AI response."""
     try:
         vectorstore = connect_pgvector()
-        retriever = vectorstore.as_retriever(search_kwargs={"k": 10}) 
+        retriever = vectorstore.as_retriever(search_kwargs={"k": 10})
     except Exception as e:
-        raise RuntimeError(f"Error connecting to PGVector: {e}")
+        print(f"Error connecting to PGVector: {e}")
+        raise
 
     prompt = ChatPromptTemplate.from_messages(
         [
@@ -88,19 +96,18 @@ def build_chain(messages: List[Dict[str, Any]]) -> RunnableSerializable:
 
     # Document retrieval + LLM integration
     setup_and_retrieval = RunnableParallel(
-        {
-            "context": retriever,  
+        {  # type: ignore
+            "context": retriever,
             "question": RunnablePassthrough(),
             "chat_history": memory.load_memory_variables,
         }
     )
 
     # Google Generative AI als LLM nutzen
-    llm = ChatGoogleGenerativeAI(model="gemini-pro", google_api_key=LLM_API_KEY)
+    llm = ChatGoogleGenerativeAI(model="gemini-pro", api_key=LLM_API_KEY)
 
     # Chain mit LLM
     return setup_and_retrieval | prompt | llm | StrOutputParser()
-
 
 
 if __name__ == "__main__":

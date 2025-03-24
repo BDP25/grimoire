@@ -1,13 +1,13 @@
+from pathlib import Path
 from typing import cast
+
+from datasets import Dataset
 from helpers import clear_vectorstore, setup_vectorstore
 from langchain_postgres import PGVector
 from langchain_text_splitters.markdown import (
     MarkdownHeaderTextSplitter,
     RecursiveCharacterTextSplitter,
 )
-from pathlib import Path
-from datasets import Dataset
-import os
 
 TEXT_CHUNK_SIZE = 512
 TEXT_CHUNK_OVERLAP = 128  # 20 - 30% of chunk size
@@ -19,27 +19,31 @@ HEADERS = [
     ("#####", "Heading 5"),
 ]
 
+
 def load_files(directory: Path, encoding: str = "utf-8") -> Dataset:
     """Load all markdown files from the specified directory using Hugging Face Datasets."""
     file_paths = list(directory.glob("*.md"))
     texts = []
-    
+
     # Iterate over the files and read their content
     for file_path in file_paths:
         try:
-            with open(file_path, 'r', encoding=encoding) as file:
+            with open(file_path, encoding=encoding) as file:
                 # Append the text and metadata (file path) to the list
-                texts.append({"text": file.read(), "metadata": {"source": str(file_path)}})
+                texts.append(
+                    {"text": file.read(), "metadata": {"source": str(file_path)}}
+                )
         except Exception as e:
             print(f"Error reading {file_path}: {e}")
             continue
-    
+
     # Create and return a Hugging Face Dataset from the list of text data
     return Dataset.from_list(texts)
 
+
 def ingest_text() -> None:
     clear_vectorstore()
-    
+
     # Define the directory where markdown files are stored
     data_directory = Path("files")
     if not data_directory.exists():
