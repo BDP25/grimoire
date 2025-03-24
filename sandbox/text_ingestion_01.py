@@ -1,6 +1,6 @@
 from typing import cast
 
-from helpers import clear_vectorstore, setup_vectorstore
+from helpers import clear_collection, setup_vectorstore
 from langchain_community.document_loaders import DirectoryLoader, TextLoader
 from langchain_core.documents import Document
 from langchain_postgres import PGVector
@@ -11,7 +11,7 @@ TEXT_CHUNK_OVERLAP = 128  # 20 - 30% Overlap
 
 
 def ingest_text() -> None:
-    clear_vectorstore()
+    clear_collection("sandbox_text")
 
     data = DirectoryLoader(
         path="files",

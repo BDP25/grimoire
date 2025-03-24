@@ -1,6 +1,6 @@
 from typing import cast
 
-from helpers import clear_vectorstore, setup_vectorstore
+from helpers import clear_collection, setup_vectorstore
 from langchain_community.document_loaders import (
     DirectoryLoader,
     TextLoader,
@@ -41,7 +41,7 @@ def load_documents() -> list:
 
 
 def ingest_text() -> None:
-    clear_vectorstore()
+    clear_collection("sandbox_text")
     data = load_documents()
 
     # Markdown-Splitter

@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import cast
 
 from datasets import Dataset
-from helpers import clear_vectorstore, setup_vectorstore
+from helpers import clear_collection, setup_vectorstore
 from langchain_postgres import PGVector
 from langchain_text_splitters.markdown import (
     MarkdownHeaderTextSplitter,
@@ -33,7 +33,7 @@ def load_files(directory: Path, encoding: str = "utf-8") -> Dataset:
                 texts.append(
                     {"text": file.read(), "metadata": {"source": str(file_path)}}
                 )
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught
             print(f"Error reading {file_path}: {e}")
             continue
 
@@ -42,7 +42,7 @@ def load_files(directory: Path, encoding: str = "utf-8") -> Dataset:
 
 
 def ingest_text() -> None:
-    clear_vectorstore()
+    clear_collection("sandbox_text")
 
     # Define the directory where markdown files are stored
     data_directory = Path("files")
