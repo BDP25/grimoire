@@ -1,16 +1,16 @@
+from pathlib import Path
+from tempfile import TemporaryDirectory
+
 from git import Repo
 from git.exc import GitCommandError
-from tempfile import TemporaryDirectory
-from pathlib import Path
-import re
 
 # List of repositories to clone
 REPOS = [
-    "https://github.com/psf/requests.git",            
-    "https://github.com/pallets/flask.git",            
-    "https://github.com/tiangolo/fastapi.git",         
-    "https://github.com/encode/httpx.git",             
-    "https://github.com/streamlit/streamlit.git",      
+    "https://github.com/psf/requests.git",
+    "https://github.com/pallets/flask.git",
+    "https://github.com/tiangolo/fastapi.git",
+    "https://github.com/encode/httpx.git",
+    "https://github.com/streamlit/streamlit.git",
 ]
 
 # Store results here
