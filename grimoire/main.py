@@ -38,6 +38,6 @@ def main(
         raise typer.Exit()
 
 
-@cli.command()
+@cli.command("version", help="Print the version of the grim cli")
 def version() -> None:
     typer.echo(f"grim cli v{__version__}")
