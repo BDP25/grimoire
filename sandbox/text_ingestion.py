@@ -28,7 +28,7 @@ def ingest_text() -> None:
         path="files",
         glob="*.md",
         loader_cls=TextLoader,
-        loader_kwargs={"encoding":"UTF-8"}
+        loader_kwargs={"encoding": "UTF-8"},
     ).load()
 
     splits = []
