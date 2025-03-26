@@ -21,9 +21,10 @@ def get_llm_client() -> BaseChatModel:
 
     # TODO: add configuration options for other models and options for model temperature, etc.
     return init_chat_model(
-        model_provider="google_genai",
-        model="gemini-2.0-flash",
+        "google_genai:gemini-2.0-flash",
         api_key=os.getenv("LLM_API_KEY"),
+        configurable_fields=None,
+        max_tokens=512,
         temperature=0,
     )
 
