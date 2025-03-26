@@ -1,14 +1,15 @@
 name: grimoire
-ingestion:
-  text_chunk_size: 512
-  text_chunk_overlap: 128
-  code_chunk_size: 512
-  code_chunk_overlap: 128
 db:
   host: localhost
   port: 5432
   user: pgvector
   password: pgvector
+llm:
+  collection: grimoire
+  text_chunk_size: 512
+  text_chunk_overlap: 128
+  code_chunk_size: 512
+  code_chunk_overlap: 128
 docs:
   - url: https://github.com/numpy/numpy
     site_url: https://numpy.org/doc/stable/

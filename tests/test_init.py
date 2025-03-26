@@ -10,7 +10,15 @@ def test_init_creates_configuration(tmp_path) -> None:
         init_cli,
         [str(tmp_path)],
         input="\n".join(
-            ["test-project", "localhost", "5432", "pgvector", "pgvector", "n"]
+            [
+                "test-project",
+                "localhost",
+                "5432",
+                "pgvector",
+                "pgvector",
+                "mycollection",
+                "n",
+            ]
         ),
     )
     assert result.exit_code == 0
@@ -19,7 +27,7 @@ def test_init_creates_configuration(tmp_path) -> None:
 
 
 def test_init_uses_default_values(tmp_path) -> None:
-    result = runner.invoke(init_cli, [str(tmp_path)], input="\n" * 5)
+    result = runner.invoke(init_cli, [str(tmp_path)], input="\n" * 6)
 
     config_content = (tmp_path / "grimoire.yaml").read_text()
     assert result.exit_code == 0
@@ -28,6 +36,7 @@ def test_init_uses_default_values(tmp_path) -> None:
     assert "port: 5432" in config_content
     assert "user: pgvector" in config_content
     assert "password: pgvector" in config_content
+    assert f"collection: {tmp_path.name}" in config_content
 
 
 def test_init_uses_custom_chunk_values(tmp_path) -> None:
@@ -41,6 +50,7 @@ def test_init_uses_custom_chunk_values(tmp_path) -> None:
                 "5432",
                 "pgvector",
                 "pgvector",
+                "my-cool-collection",
                 "y",
                 "256",
                 "64",
@@ -52,6 +62,7 @@ def test_init_uses_custom_chunk_values(tmp_path) -> None:
 
     config_content = (tmp_path / "grimoire.yaml").read_text()
     assert result.exit_code == 0
+    assert "collection: my-cool-collection" in config_content
     assert "text_chunk_size: 256" in config_content
     assert "text_chunk_overlap: 64" in config_content
     assert "code_chunk_size: 512" in config_content
@@ -72,7 +83,16 @@ def test_init_overwrite_existing_file(tmp_path) -> None:
         init_cli,
         [str(tmp_path)],
         input="\n".join(
-            ["y", "test-project", "localhost", "5432", "pgvector", "pgvector", "n"]
+            [
+                "y",
+                "test-project",
+                "localhost",
+                "5432",
+                "pgvector",
+                "pgvector",
+                "mycollection",
+                "n",
+            ]
         ),
     )
     assert result.exit_code == 0
