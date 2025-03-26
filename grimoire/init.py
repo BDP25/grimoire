@@ -7,7 +7,7 @@ from grimoire.configuration import (
     CodeSource,
     DBConfiguration,
     DocumentSource,
-    IngestionConfiguration,
+    LLMConfiguration,
     ProjectConfiguration,
 )
 
@@ -55,8 +55,10 @@ def get_project_config(path: Path) -> ProjectConfiguration:
         password=typer.prompt("Database password", default="pgvector"),
     )
 
+    collection = typer.prompt("Unique collection name", default=path.name)
     if typer.confirm("Want to modify default chunk size and overlapp?", default=False):
-        ingestion_config = IngestionConfiguration(
+        ingestion_config = LLMConfiguration(
+            collection=collection,
             text_chunk_size=typer.prompt("Text chunk size", default=512, type=int),
             text_chunk_overlap=typer.prompt(
                 "Text chunk overlap", default=128, type=int
@@ -67,7 +69,8 @@ def get_project_config(path: Path) -> ProjectConfiguration:
             ),
         )
     else:
-        ingestion_config = IngestionConfiguration(
+        ingestion_config = LLMConfiguration(
+            collection=collection,
             text_chunk_size=512,
             text_chunk_overlap=128,
             code_chunk_size=512,
@@ -76,7 +79,7 @@ def get_project_config(path: Path) -> ProjectConfiguration:
 
     return ProjectConfiguration(
         name=project_name,
-        ingestion=ingestion_config,
+        llm=ingestion_config,
         db=db_config,
         docs=DUMMY_DOCS,
         code=DUMMY_CODE,

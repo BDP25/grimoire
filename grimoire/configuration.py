@@ -16,7 +16,8 @@ class YamlDumper(yaml.Dumper):
         return super().increase_indent(flow, False)
 
 
-class IngestionConfiguration(BaseModel):
+class LLMConfiguration(BaseModel):
+    collection: str
     text_chunk_size: int
     text_chunk_overlap: int
     code_chunk_size: int
@@ -48,8 +49,8 @@ class DocumentSource(BaseModel):
 
 class ProjectConfiguration(BaseModel):
     name: str
-    ingestion: IngestionConfiguration
     db: DBConfiguration
+    llm: LLMConfiguration
     docs: list[DocumentSource] | None = None
     code: list[CodeSource] | None = None
 
