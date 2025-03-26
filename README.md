@@ -71,7 +71,7 @@ grim --help
 │ --help          Show this message and exit.                                  │
 ╰──────────────────────────────────────────────────────────────────────────────╯
 ╭─ Commands ───────────────────────────────────────────────────────────────────╮
-│ version                                                                      │
+│ version   Print the version of the grim cli                                  │
 │ ask       Ask a question with project context                                │
 │ sync      Sync the grimoire project with existing configuration              │
 │ verify    Verify the configuration of the project                            │
