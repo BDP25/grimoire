@@ -12,18 +12,6 @@ llm:
   code_chunk_overlap: 128
 docs:
   - url: https://github.com/numpy/numpy
-    site_url: https://numpy.org/doc/stable/
-    exclude: null
-    include: null
   - url: https://github.com/pandas-dev/pandas
-    site_url: https://pandas.pydata.org/docs/
-    exclude:
-      - doc/.gitignore
-      - doc/redirects.csv
-      - doc/scripts/*
-      - doc/cheatsheet/*
-    include:
-      - doc
 code:
   - url: https://github.com/pandas-dev/pandas
-    path: pandas

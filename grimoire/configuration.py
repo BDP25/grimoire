@@ -37,14 +37,10 @@ class DBConfiguration(BaseModel):
 
 class CodeSource(BaseModel):
     url: str
-    path: str | None
 
 
 class DocumentSource(BaseModel):
     url: str
-    site_url: str
-    exclude: list[str] | None = None
-    include: list[str] | None = None
 
 
 class ProjectConfiguration(BaseModel):
