@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Install git
+        run: apt-get update && apt-get install -y git
       - name: Run pytest
         run: uv run poe test
       - name: Upload test coverage
