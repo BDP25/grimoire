@@ -14,28 +14,12 @@ from grimoire.configuration import (
 init_cli = typer.Typer()
 
 DUMMY_DOCS = [
-    DocumentSource(
-        site_url="https://numpy.org/doc/stable/",
-        url="https://github.com/numpy/numpy",
-    ),
-    DocumentSource(
-        site_url="https://pandas.pydata.org/docs/",
-        url="https://github.com/pandas-dev/pandas",
-        exclude=[
-            "doc/.gitignore",
-            "doc/redirects.csv",
-            "doc/scripts/*",
-            "doc/cheatsheet/*",
-        ],
-        include=["doc"],
-    ),
+    DocumentSource(url="https://github.com/numpy/numpy"),
+    DocumentSource(url="https://github.com/pandas-dev/pandas"),
 ]
 
 DUMMY_CODE = [
-    CodeSource(
-        url="https://github.com/pandas-dev/pandas",
-        path="pandas",
-    )
+    CodeSource(url="https://github.com/pandas-dev/pandas"),
 ]
 
 
