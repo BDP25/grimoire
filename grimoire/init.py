@@ -4,22 +4,17 @@ import typer
 
 from grimoire.configuration import (
     CONFIG_FILE_NAME,
-    CodeSource,
     DBConfiguration,
-    DocumentSource,
     LLMConfiguration,
     ProjectConfiguration,
+    Source,
 )
 
 init_cli = typer.Typer()
 
-DUMMY_DOCS = [
-    DocumentSource(url="https://github.com/numpy/numpy"),
-    DocumentSource(url="https://github.com/pandas-dev/pandas"),
-]
-
-DUMMY_CODE = [
-    CodeSource(url="https://github.com/pandas-dev/pandas"),
+DUMMY_SOURCES = [
+    Source(url="https://github.com/numpy/numpy"),
+    Source(url="https://github.com/pandas-dev/pandas"),
 ]
 
 
@@ -65,8 +60,7 @@ def get_project_config(path: Path) -> ProjectConfiguration:
         name=project_name,
         llm=ingestion_config,
         db=db_config,
-        docs=DUMMY_DOCS,
-        code=DUMMY_CODE,
+        sources=DUMMY_SOURCES,
     )
 
 

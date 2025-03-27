@@ -10,8 +10,6 @@ llm:
   text_chunk_overlap: 128
   code_chunk_size: 512
   code_chunk_overlap: 128
-docs:
+sources:
   - url: https://github.com/numpy/numpy
-  - url: https://github.com/pandas-dev/pandas
-code:
   - url: https://github.com/pandas-dev/pandas

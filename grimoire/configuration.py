@@ -35,11 +35,7 @@ class DBConfiguration(BaseModel):
     password: str
 
 
-class CodeSource(BaseModel):
-    url: str
-
-
-class DocumentSource(BaseModel):
+class Source(BaseModel):
     url: str
 
 
@@ -47,8 +43,7 @@ class ProjectConfiguration(BaseModel):
     name: str
     db: DBConfiguration
     llm: LLMConfiguration
-    docs: list[DocumentSource] | None = None
-    code: list[CodeSource] | None = None
+    sources: list[Source] | None = None
 
     @classmethod
     def load_from_yaml(cls, file_path: Path) -> "ProjectConfiguration":  # noqa: B008
