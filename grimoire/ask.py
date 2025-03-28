@@ -1,10 +1,10 @@
 import os
 
 import typer
-from langchain.chat_models import init_chat_model
 from langchain.chat_models.base import BaseChatModel
 
-from grimoire.helpers import blue_text, red_text
+from grimoire.helpers.rag import setup_llm
+from grimoire.helpers.typer import blue_text, red_text
 
 ask_cli = typer.Typer()
 
@@ -20,13 +20,7 @@ def get_llm_client() -> BaseChatModel:
         raise typer.Exit(code=1)
 
     # TODO: add configuration options for other models and options for model temperature, etc.
-    return init_chat_model(
-        "google_genai:gemini-2.0-flash",
-        api_key=os.getenv("LLM_API_KEY"),
-        configurable_fields=None,
-        max_tokens=512,
-        temperature=0,
-    )
+    return setup_llm()
 
 
 @ask_cli.command("ask", help="Ask a question with project context")
