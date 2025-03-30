@@ -8,10 +8,10 @@ from langchain_postgres import PGVector
 from langchain_text_splitters.markdown import Language, RecursiveCharacterTextSplitter
 
 
-def ingest_code() -> None:
+def ingest_code(repo_path: Path) -> None:
     clear_vectorstore()
     data = GenericLoader.from_filesystem(
-        path="files",
+        path=repo_path,
         suffixes=[".py", ".js", ".ts", ".html", ".css"],
         parser=LanguageParser(),
     ).load()
@@ -44,4 +44,4 @@ def ingest_code() -> None:
 
 
 if __name__ == "__main__":
-    ingest_code()
+    ingest_code(Path("files"))

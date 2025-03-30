@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import cast
 
 from helpers import clear_collection, setup_vectorstore
@@ -22,11 +23,11 @@ HEADERS = [
 ]
 
 
-def ingest_text() -> None:
+def ingest_text(repo_path: str) -> None:
     clear_collection("sandbox_text")
     data = DirectoryLoader(
-        path="files",
-        glob="*.md",
+        path=repo_path,
+        glob=["*.md", "*.txt", "*.rsd", "*.rst"],
         loader_cls=TextLoader,
         loader_kwargs={"encoding": "UTF-8"},
     ).load()
@@ -52,4 +53,4 @@ def ingest_text() -> None:
 
 
 if __name__ == "__main__":
-    ingest_text()
+    ingest_text(str(Path("files")))

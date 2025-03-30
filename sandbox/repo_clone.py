@@ -1,8 +1,10 @@
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
+from code_ingestion import ingest_code
 from git import Repo
 from git.exc import GitCommandError
+from text_ingestion import ingest_text
 
 # List of repositories to clone
 REPOS = [
@@ -34,6 +36,11 @@ def clone_and_process(repo_url: str, base_path: Path) -> None:
         Repo.clone_from(repo_url, to_path=target_path, depth=1)
         title = extract_readme_title(target_path)
         cloned_repo_titles.append((repo_url, title))
+
+        # Run ingestion pipelines
+        ingest_text(str(target_path))  # DirectoryLoader requires str as input
+        ingest_code(target_path)
+
     except GitCommandError as e:
         print(f"Failed to clone {repo_url}: {e}")
         cloned_repo_titles.append((repo_url, "Clone failed"))
