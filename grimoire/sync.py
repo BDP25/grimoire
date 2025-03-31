@@ -53,8 +53,9 @@ def sync(
 
     if config.include_project:
         text_splits = text_ingestion(path, config.llm, exclude=DEFAULT_EXCLUDE)
-        # TODO: make project entrypoint definition dynamic
-        code_splits = code_ingestion(path, config.llm, glob="grimoire/**/*")
+        code_splits = code_ingestion(
+            path, config.llm, glob=f"{config.project_src}/**/*"
+        )
         vectorstore.add_documents(text_splits)
         vectorstore.add_documents(code_splits)
 

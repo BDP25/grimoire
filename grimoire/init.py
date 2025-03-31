@@ -31,6 +31,9 @@ def get_project_config(path: Path) -> ProjectConfiguration:
     """
     project_name = typer.prompt("Project name", default=path.name)
     include_project = typer.confirm("Include project in embeddings?", default=True)
+    project_src = typer.prompt(
+        "What is the project src folder? (e.g. src, <project-name>)", default=path.name
+    )
 
     db_config = DBConfiguration(
         host=typer.prompt("Database host", default="localhost"),
@@ -64,6 +67,7 @@ def get_project_config(path: Path) -> ProjectConfiguration:
     return ProjectConfiguration(
         name=project_name,
         include_project=include_project,
+        project_src=project_src,
         llm=ingestion_config,
         db=db_config,
         sources=DUMMY_SOURCES,
