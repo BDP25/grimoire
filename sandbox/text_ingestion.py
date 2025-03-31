@@ -30,6 +30,8 @@ def ingest_text(repo_path: str) -> None:
         glob=["*.md", "*.txt", "*.rsd", "*.rst"],
         loader_cls=TextLoader,
         loader_kwargs={"encoding": "UTF-8"},
+        use_multithreading=True, # Improves performance
+        recursive=True           # Ensures all subfolders are scanned
     ).load()
 
     splits = []
