@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import cast
 
-from helpers import clear_vectorstore, setup_vectorstore
+from helpers import clear_collection, setup_vectorstore
 from langchain_community.document_loaders.generic import GenericLoader
 from langchain_community.document_loaders.parsers.language import LanguageParser
 from langchain_postgres import PGVector
@@ -9,7 +9,7 @@ from langchain_text_splitters.markdown import Language, RecursiveCharacterTextSp
 
 
 def ingest_code(repo_path: Path) -> None:
-    clear_vectorstore()
+    clear_collection("sandbox_code")
     data = GenericLoader.from_filesystem(
         path=repo_path,
         suffixes=[".py", ".js", ".ts", ".html", ".css"],
