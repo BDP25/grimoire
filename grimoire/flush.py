@@ -18,11 +18,13 @@ def flush(
 ) -> None:
     config = ProjectConfiguration.load_from_yaml(path / CONFIG_FILE_NAME)
 
-    if typer.confirm("Do you really want to flush the vectorstore?", default=False):
-        try:
-            vectorstore = vectorstore_connection(config.db)
-            delete_vectorstore(vectorstore)
-        except psycopg.OperationalError as e:
-            typer.echo(f"Error: {e}")
-            raise e
-        typer.echo("Vectorstore flushed")
+    if not typer.confirm("Do you really want to flush the vectorstore?", default=False):
+        raise typer.Abort()
+
+    try:
+        vectorstore = vectorstore_connection(config.db)
+        delete_vectorstore(vectorstore)
+    except psycopg.OperationalError as e:
+        typer.echo(f"Error: {e}")
+        raise e
+    typer.echo("Vectorstore flushed")

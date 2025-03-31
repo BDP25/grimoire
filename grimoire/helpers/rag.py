@@ -1,13 +1,35 @@
 import os
+from pathlib import Path
+from typing import Any
 
 import torch
 from langchain.chat_models import init_chat_model
+from langchain_community.document_loaders import (
+    DirectoryLoader,
+    TextLoader,
+)
+from langchain_community.document_loaders.generic import GenericLoader
+from langchain_community.document_loaders.parsers.language import LanguageParser
+from langchain_core.documents import Document
 from langchain_core.language_models.chat_models import BaseChatModel
 from langchain_core.vectorstores import VectorStore
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_postgres import PGVector
+from langchain_text_splitters.markdown import (
+    Language,
+    MarkdownHeaderTextSplitter,
+    RecursiveCharacterTextSplitter,
+)
 
-from grimoire.configuration import DBConfiguration
+from grimoire.configuration import DBConfiguration, LLMConfiguration
+
+HEADERS = [
+    ("#", "Heading 1"),
+    ("##", "Heading 2"),
+    ("###", "Heading 3"),
+    ("####", "Heading 4"),
+    ("#####", "Heading 5"),
+]
 
 
 def vectorstore_connection(db: DBConfiguration) -> str:
@@ -22,6 +44,7 @@ def vectorstore_connection(db: DBConfiguration) -> str:
 
 
 def embeddings() -> HuggingFaceEmbeddings:
+    os.environ["TOKENIZERS_PARALLELISM"] = "false"
     device = (
         "cuda"
         if torch.cuda.is_available()
@@ -83,12 +106,63 @@ def setup_llm() -> BaseChatModel:
 
 
 def text_ingestion(
-    collection: str, text_chunk_size: int, text_chunk_overlap: int
-) -> None:
-    pass
+    path: Path, llm_config: LLMConfiguration, **kwargs: Any
+) -> list[Document]:
+    data = DirectoryLoader(
+        path=str(path),
+        glob=["**/*.md", "**/*.rst", "**/*.txt"],
+        loader_cls=TextLoader,
+        loader_kwargs={"encoding": "UTF-8"},
+        **kwargs,
+    ).load()
+
+    splits = []
+    md_splitter = MarkdownHeaderTextSplitter(
+        headers_to_split_on=HEADERS,
+        strip_headers=True,
+    )
+
+    for document in data:
+        for split in md_splitter.split_text(document.page_content):
+            splits.append(split)
+
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=llm_config.text_chunk_size,
+        chunk_overlap=llm_config.text_chunk_overlap,
+    )
+    return text_splitter.split_documents(splits)
 
 
 def code_ingestion(
-    collection: str, code_chunk_size: int, code_chunk_overlap: int
-) -> None:
-    pass
+    path: Path, llm_config: LLMConfiguration, **kwargs: Any
+) -> list[Document]:
+    data = GenericLoader.from_filesystem(
+        path=path,
+        suffixes=[".py", ".js", ".ts", ".html", ".css"],
+        parser=LanguageParser(),
+        **kwargs,
+    ).load()
+
+    splits = []
+    for document in data:
+        language = document.metadata.get("language")
+        source = Path(document.metadata.get("source", ""))
+        if language is None:
+            try:
+                language = Language(source.suffix[1:])
+            except ValueError:
+                language = None
+
+        if language:
+            text_splitter = RecursiveCharacterTextSplitter.from_language(
+                language=language,
+                chunk_size=llm_config.code_chunk_size,
+                chunk_overlap=llm_config.code_chunk_overlap,
+            )
+        else:
+            text_splitter = RecursiveCharacterTextSplitter(
+                chunk_size=llm_config.code_chunk_size,
+                chunk_overlap=llm_config.code_chunk_overlap,
+            )
+        splits.extend(text_splitter.split_documents([document]))
+    return splits

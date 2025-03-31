@@ -37,12 +37,15 @@ class DBConfiguration(BaseModel):
 
 class Source(BaseModel):
     url: str
+    include_md: bool = True
+    include_code: bool = False
 
 
 class ProjectConfiguration(BaseModel):
     name: str
     db: DBConfiguration
     llm: LLMConfiguration
+    include_project: bool = True
     sources: list[Source] | None = None
 
     @classmethod
