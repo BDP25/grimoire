@@ -13,8 +13,12 @@ from grimoire.configuration import (
 init_cli = typer.Typer()
 
 DUMMY_SOURCES = [
-    Source(url="https://github.com/numpy/numpy"),
-    Source(url="https://github.com/pandas-dev/pandas"),
+    Source(url="https://github.com/pallets/flask"),
+    Source(url="https://github.com/corydolphin/flask-cors"),
+    Source(url="https://github.com/pallets-eco/flask-sqlalchemy"),
+    Source(url="https://github.com/miguelgrinberg/Flask-Migrate"),
+    Source(url="https://github.com/psf/requests"),
+    Source(url="https://github.com/benoitc/gunicorn"),
 ]
 
 
@@ -26,6 +30,7 @@ def get_project_config(path: Path) -> ProjectConfiguration:
     :return: ProjectConfiguration
     """
     project_name = typer.prompt("Project name", default=path.name)
+    include_project = typer.confirm("Include project in embeddings?", default=True)
 
     db_config = DBConfiguration(
         host=typer.prompt("Database host", default="localhost"),
@@ -58,6 +63,7 @@ def get_project_config(path: Path) -> ProjectConfiguration:
 
     return ProjectConfiguration(
         name=project_name,
+        include_project=include_project,
         llm=ingestion_config,
         db=db_config,
         sources=DUMMY_SOURCES,
