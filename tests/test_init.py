@@ -13,6 +13,7 @@ def test_init_creates_configuration(tmp_path) -> None:
             [
                 "test-project",
                 "y",
+                "grimoire",
                 "localhost",
                 "5432",
                 "pgvector",
@@ -28,7 +29,7 @@ def test_init_creates_configuration(tmp_path) -> None:
 
 
 def test_init_uses_default_values(tmp_path) -> None:
-    result = runner.invoke(init_cli, [str(tmp_path)], input="\n" * 7)
+    result = runner.invoke(init_cli, [str(tmp_path)], input="\n" * 8)
 
     config_content = (tmp_path / "grimoire.yaml").read_text()
     assert result.exit_code == 0
@@ -48,6 +49,7 @@ def test_init_uses_custom_chunk_values(tmp_path) -> None:
             [
                 "test-project",
                 "y",
+                "grimoire",
                 "localhost",
                 "5432",
                 "pgvector",
@@ -89,6 +91,7 @@ def test_init_overwrite_existing_file(tmp_path) -> None:
                 "y",
                 "test-project",
                 "y",
+                "grimoire",
                 "localhost",
                 "5432",
                 "pgvector",

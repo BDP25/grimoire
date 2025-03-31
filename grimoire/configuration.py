@@ -46,6 +46,7 @@ class ProjectConfiguration(BaseModel):
     db: DBConfiguration
     llm: LLMConfiguration
     include_project: bool = True
+    project_src: str | None = None
     sources: list[Source] | None = None
 
     @classmethod
