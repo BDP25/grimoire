@@ -41,7 +41,7 @@ HEADERS = [
 
 SYSTEM_MESSAGE = """
 
-Your name is grimoire. You are an AI assistent who helps with questions about code and projects.
+Your name is grimoire. You are an AI assistant who helps with questions about code and projects.
 
 Rules:
 - Do not make up an answer if you do not know the answer, just say that you do not know the answer.
@@ -161,6 +161,7 @@ def get_retrieval_chain(collection: str, connection: str) -> RunnableSerializabl
 
     retrieval = RunnableParallel(
         {  # type: ignore
+            # TODO: add generic search_kwargs from config
             "context": vectorstore.as_retriever(),
             "question": RunnablePassthrough(),
         }

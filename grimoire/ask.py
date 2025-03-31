@@ -45,6 +45,7 @@ def ask(
             typer.echo(chunk.content, nl=False)
 
     else:
+        # TODO: add dependency injection
         config = ProjectConfiguration.load_from_yaml(path / CONFIG_FILE_NAME)
         connection = vectorstore_connection(config.db)
         rag_client = get_retrieval_chain(config.name, connection)
