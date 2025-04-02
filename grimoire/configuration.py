@@ -18,10 +18,13 @@ class YamlDumper(yaml.Dumper):
 
 class LLMConfiguration(BaseModel):
     collection: str
-    text_chunk_size: int
-    text_chunk_overlap: int
-    code_chunk_size: int
-    code_chunk_overlap: int
+    k_results: int = 5
+    score_threshold: float = 0.8
+    lambda_mult: float = 0.5
+    text_chunk_size: int = 512
+    text_chunk_overlap: int = 128
+    code_chunk_size: int = 512
+    code_chunk_overlap: int = 128
 
 
 class DBConfiguration(BaseModel):
