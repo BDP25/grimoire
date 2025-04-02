@@ -31,6 +31,7 @@ class DBConfiguration(BaseModel):
 
     host: str
     port: int
+    db: str
     user: str
     password: str
 

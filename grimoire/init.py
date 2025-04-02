@@ -38,6 +38,7 @@ def get_project_config(path: Path) -> ProjectConfiguration:
     db_config = DBConfiguration(
         host=typer.prompt("Database host", default="localhost"),
         port=typer.prompt("Database port", default="5432"),
+        db=typer.prompt("Database name", default="postgres"),
         user=typer.prompt("Database user", default="pgvector"),
         password=typer.prompt("Database password", default="pgvector"),
     )
