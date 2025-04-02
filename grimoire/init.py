@@ -9,6 +9,7 @@ from grimoire.configuration import (
     ProjectConfiguration,
     Source,
 )
+from grimoire.helpers.typer import green_text
 
 init_cli = typer.Typer()
 
@@ -43,27 +44,9 @@ def get_project_config(path: Path) -> ProjectConfiguration:
         password=typer.prompt("Database password", default="pgvector"),
     )
 
-    collection = typer.prompt("Unique collection name", default=path.name)
-    if typer.confirm("Want to modify default chunk size and overlapp?", default=False):
-        ingestion_config = LLMConfiguration(
-            collection=collection,
-            text_chunk_size=typer.prompt("Text chunk size", default=512, type=int),
-            text_chunk_overlap=typer.prompt(
-                "Text chunk overlap", default=128, type=int
-            ),
-            code_chunk_size=typer.prompt("Code chunk size", default=512, type=int),
-            code_chunk_overlap=typer.prompt(
-                "Code chunk overlap", default=128, type=int
-            ),
-        )
-    else:
-        ingestion_config = LLMConfiguration(
-            collection=collection,
-            text_chunk_size=512,
-            text_chunk_overlap=128,
-            code_chunk_size=512,
-            code_chunk_overlap=128,
-        )
+    ingestion_config = LLMConfiguration(
+        collection=typer.prompt("Unique collection name", default=path.name)
+    )
 
     return ProjectConfiguration(
         name=project_name,
@@ -95,4 +78,11 @@ def init(
 
     config: ProjectConfiguration = get_project_config(path)
     config.save_to_yaml(file_path)
-    typer.echo(f"Configuration saved at {file_path}")
+
+    success_message = f"""
+    {green_text("Grimoire project initialized successfully! 🎉")}
+
+    Configuration: {file_path}
+    Note: directly modify the "{CONFIG_FILE_NAME}" configuration to your needs.
+    """.strip()
+    typer.echo(f"\n{success_message}\n")  # required for better formatting

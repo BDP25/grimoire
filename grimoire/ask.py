@@ -47,7 +47,7 @@ def ask(
         vectorstore = setup_vectorstore(config.llm.collection, connection)
         vectorstore = cast(PGVector, vectorstore)
 
-        rag_client = get_retrieval_chain(vectorstore, llm)
+        rag_client = get_retrieval_chain(vectorstore, llm, config.llm)
 
         for chunk in rag_client.stream(question_str):
             typer.echo(chunk, nl=False)

@@ -7,6 +7,9 @@ db:
   password: pgvector
 llm:
   collection: grimoire
+  k_results: 5
+  score_threshold: 0.8
+  lambda_mult: 0.5
   text_chunk_size: 512
   text_chunk_overlap: 128
   code_chunk_size: 512

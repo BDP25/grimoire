@@ -142,7 +142,7 @@ def setup_llm() -> BaseChatModel:
 
 
 def get_retrieval_chain(
-    vectorstore: VectorStore, llm: BaseChatModel
+    vectorstore: VectorStore, llm: BaseChatModel, config: LLMConfiguration
 ) -> RunnableSerializable:
     # suppress grpc and glog logs
     os.environ["GRPC_VERBOSITY"] = "ERROR"
@@ -159,8 +159,13 @@ def get_retrieval_chain(
 
     retrieval = RunnableParallel(
         {  # type: ignore
-            # TODO: add generic search_kwargs from config
-            "context": vectorstore.as_retriever(),
+            "context": vectorstore.as_retriever(
+                search_kwargs={
+                    "k": config.k_results,
+                    "score_threshold": config.score_threshold,
+                    "lambda_mult": config.lambda_mult,
+                }
+            ),
             "question": RunnablePassthrough(),
         }
     )
