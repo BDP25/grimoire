@@ -72,7 +72,7 @@ def vectorstore_connection(db: DBConfiguration) -> str:
         driver="psycopg",
         host=db.host,
         port=db.port,
-        database="postgres",  # TODO: make this configurable
+        database=db.db,
         user=db.user,
         password=db.password,
     )
