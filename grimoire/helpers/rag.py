@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from typing import Any, cast
+from typing import Any
 
 import torch
 from langchain.chat_models import init_chat_model
@@ -131,6 +131,7 @@ def delete_vectorstore(connection: str) -> None:
 
 
 def setup_llm() -> BaseChatModel:
+    # TODO: add support for other LLMs and advanced configuration
     return init_chat_model(
         "google_genai:gemini-2.0-flash",
         api_key=os.getenv("LLM_API_KEY"),
@@ -140,15 +141,12 @@ def setup_llm() -> BaseChatModel:
     )
 
 
-def get_retrieval_chain(collection: str, connection: str) -> RunnableSerializable:
+def get_retrieval_chain(
+    vectorstore: VectorStore, llm: BaseChatModel
+) -> RunnableSerializable:
     # suppress grpc and glog logs
     os.environ["GRPC_VERBOSITY"] = "ERROR"
     os.environ["GLOG_MINLOGLEVEL"] = "2"
-
-    llm = setup_llm()
-
-    vectorstore = setup_vectorstore(collection, connection)
-    vectorstore = cast(VectorStore, vectorstore)
 
     prompt = ChatPromptTemplate.from_messages(
         [
