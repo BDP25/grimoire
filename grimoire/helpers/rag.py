@@ -178,7 +178,9 @@ def text_ingestion(
 ) -> list[Document]:
     data = DirectoryLoader(
         path=str(path),
-        glob=["**/*.md", "**/*.rst", "**/*.txt"],
+        glob=["*.md", "*.txt", "*.rsd", "*.rst"],
+        recursive=True,
+        use_multithreading=True,
         loader_cls=TextLoader,
         loader_kwargs={"encoding": "UTF-8"},
         **kwargs,
