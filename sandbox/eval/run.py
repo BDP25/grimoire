@@ -42,7 +42,7 @@ def run_evaluation() -> None:
     """Runs the evaluation and stores results in a readable format."""
     questions = load_questions()
     table_results = []
-    full_answers = []
+    full_answers = ["# Evaluation\n"]
 
     for q in questions:
         question_text = q["question"]
@@ -51,7 +51,7 @@ def run_evaluation() -> None:
 
         # Store full answers separately
         full_answers.append(
-            f"### Q{q['id']}: {question_text}\n\n**LLM Only:**\n{answer_without_rag}\n\n**LLM + RAG:**\n{answer_with_rag}\n\n---\n"
+            f"## Q{q['id']}: {question_text}\n\n### LLM Only:\n{answer_without_rag}\n\n### LLM + RAG:\n{answer_with_rag}\n\n---\n"
         )
 
         # Truncate answers for table readability
