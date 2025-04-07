@@ -1,6 +1,7 @@
-from run import load_questions, ask_question_with_grim
-from pathlib import Path
 import re
+from pathlib import Path
+
+from run import ask_question_with_grim, load_questions
 
 EVAL_FOLDER = Path(__file__).parent
 SCORES_FILE = EVAL_FOLDER / "scores.md"
@@ -12,7 +13,7 @@ def evaluate_scores() -> None:
     scores = [
         "# Evaluation Scores\n",
         "| ID | Question | Score (LLM Only) | Score (LLM + RAG) | Comment |",
-        "|----|----------|------------------|-------------------|---------|"
+        "|----|----------|------------------|-------------------|---------|",
     ]
 
     for q in questions:
@@ -25,7 +26,7 @@ def evaluate_scores() -> None:
             f"Evaluate the two answers on a scale from 0 to 10:\n"
             f"- 10 means the answer is perfect.\n"
             f"- 0 means the answer is completely useless or irrelevant.\n\n"
-            f"Question: \"{question_text}\"\n\n"
+            f'Question: "{question_text}"\n\n'
             f"Answer A (LLM Only): {answer_a}\n\n"
             f"Answer B (LLM + RAG): {answer_b}\n\n"
             f"Return the scores for both answers in the following format:\n"
@@ -40,8 +41,12 @@ def evaluate_scores() -> None:
         score_b = "?"
         comment = ""
 
-        score_a_match = re.search(r"Score \(LLM Only\):\s*([0-9](?:\.\d{1,2})?)", evaluation)
-        score_b_match = re.search(r"Score \(LLM \+ RAG\):\s*([0-9](?:\.\d{1,2})?)", evaluation)
+        score_a_match = re.search(
+            r"Score \(LLM Only\):\s*([0-9](?:\.\d{1,2})?)", evaluation
+        )
+        score_b_match = re.search(
+            r"Score \(LLM \+ RAG\):\s*([0-9](?:\.\d{1,2})?)", evaluation
+        )
         comment_match = re.search(r"Comment:\s*(.*)", evaluation)
 
         if score_a_match:
