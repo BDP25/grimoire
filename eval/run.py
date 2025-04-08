@@ -25,7 +25,12 @@ def ask_question_with_grim(question_text: str, skip_rag: bool = False) -> str:
         cmd.append("--skip-rag")
 
     result = subprocess.run(
-        cmd, capture_output=True, text=True, encoding="utf-8", errors="ignore"
+        cmd,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="ignore",
+        check=True,
     )
 
     # Clean output by removing unnecessary prefixes
