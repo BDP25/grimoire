@@ -1,7 +1,7 @@
 {
     "questions": [
       { "id": 1, "question": "What is a markdown file?" },
-      { "id": 2, "question": "What is the difference between Flask and FastAPI?" },
+      { "id": 2, "question": "How does the structure look like in a markdown file?" },
       { "id": 3, "question": "How can I handle CORS in Flask?" }
     ]
   }

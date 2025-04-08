@@ -1,0 +1,7 @@
+# Evaluation Scores
+
+| ID | Question | Score A | Score B | Comment |
+|----|----------|---------|---------|---------|
+| 1 | What is a markdown file? | 10 | 9 | Answer A is significantly better because it provides a comprehensive explanation of what a Markdown file is, including its purpose, syntax, benefits, and examples. Answer B is too brief and lacks detail, offering only a superficial understanding. |
+| 2 | How does the structure look like in a markdown file? | 9 | 8 | Answer A is much better because it provides detailed explanations and examples of each structural element in Markdown, making it easier to understand. Answer B is more concise but lacks the depth and clarity of Answer A, especially in providing concrete examples. |
+| 3 | How can I handle CORS in Flask? | 9 | 9 | Answer A is significantly better because it provides a more comprehensive explanation of how to use Flask-CORS, including installation instructions, examples for both development and production (with security warnings), and options for configuring allowed origins, methods, and headers. Answer B provides a minimal example but lacks the depth and context necessary for a user to effectively implement CORS in a real-world application. |
