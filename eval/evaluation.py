@@ -12,8 +12,7 @@ SCORES_FILE = EVAL_FOLDER / "scores.md"
 
 def extract_score(text: str) -> str:
     """Extract a number between 0 and 10 from the LLM response."""
-    match = re.search(r"\b(\d{1,2})\b", text)
-    if match:
+    if match := re.search(r"\b(\d{1,2})\b", text):
         score = int(match.group(1))
         if 0 <= score <= 10:
             return str(score)
