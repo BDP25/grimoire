@@ -14,3 +14,4 @@ coverage.xml
 junit.xml
 pylint_results.xml
 repomix-output.xml
+**/.DS_Store
