@@ -1,0 +1,46 @@
+name: grimoire
+db:
+  host: localhost
+  port: 5432
+  db: postgres
+  user: pgvector
+  password: pgvector
+llm:
+  collection: sandbox
+  k_results: 5
+  score_threshold: 0.8
+  lambda_mult: 0.5
+  text_chunk_size: 512
+  text_chunk_overlap: 128
+  code_chunk_size: 512
+  code_chunk_overlap: 128
+include_project: true
+project_src: sandbox
+sources:
+  - url: https://github.com/pallets/flask
+    include_md: true
+    include_code: false
+  - url: https://github.com/corydolphin/flask-cors
+    include_md: true
+    include_code: false
+  - url: https://github.com/pallets-eco/flask-sqlalchemy
+    include_md: true
+    include_code: false
+  - url: https://github.com/miguelgrinberg/Flask-Migrate
+    include_md: true
+    include_code: false
+  - url: https://github.com/psf/requests
+    include_md: true
+    include_code: false
+  - url: https://github.com/benoitc/gunicorn
+    include_md: true
+    include_code: false
+  - url: https://github.com/tiangolo/fastapi.git
+    include_md: true
+    include_code: false    
+  - url: https://github.com/encode/httpx.git
+    include_md: true
+    include_code: false 
+  - url: https://github.com/streamlit/streamlit.git
+    include_md: true
+    include_code: false     

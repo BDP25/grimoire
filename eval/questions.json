@@ -1,6 +1,6 @@
 {
     "questions": [
-      { "id": 1, "question":  "How do I clone the Requests repository?" },
+      { "id": 1, "question": "How do I clone the Requests repository?" },
       { "id": 2, "question": "How do I build a website with Streamlit? Please give an example code." },
       { "id": 3, "question": "What does the library '__future__'  do?" },
       { "id": 4, "question": "Please share the link to the scource code of fastapi" },
@@ -19,7 +19,17 @@
       { "id": 17, "question": "What are the requirements to use the library requests?" },
       { "id": 18, "question": "For what can I use Streamlit?" },
       { "id": 19, "question": "Is Streamlit open-source?" },
-      { "id": 20, "question": "Why does the url_prefix in the blog blueprint of Flask not work?" }
+      { "id": 20, "question": "Why does the url_prefix in the blog blueprint of Flask not work?" },
+      { "id": 21, "question": "What is the purpose of Migrate(app, db) in Flask-Migrate?" },
+      { "id": 22, "question": "What CLI commands are available via flask db after integrating Flask-Migrate?" },
+      { "id": 23, "question": "How do you roll back to a previous migration revision using Flask-Migrate?" },
+      { "id": 24, "question": "What does flask db migrate -m 'message' actually do under the hood?" },
+      { "id": 25, "question": "What steps are necessary when your models change and you want to update the database schema?" },
+      { "id": 26, "question": "Does Flask-Migrate require Alembic to work?" },
+      { "id": 27, "question": "Is Requests production-ready for large-scale HTTP usage?" },
+      { "id": 28, "question": "Is Gunicorn framework-specific or can it serve any WSGI app?" },
+      { "id": 29, "question": "Is FastAPI built on WSGI or ASGI?" },
+      { "id": 30, "question": "Can HTTPX make both synchronous and asynchronous requests?" }
     ]
   }
   
