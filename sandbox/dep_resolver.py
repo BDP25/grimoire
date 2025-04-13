@@ -1,11 +1,9 @@
-import shutil
-import tempfile
 from pathlib import Path
 
 import requests
 import toml
-from git import Repo
-from packaging.version import InvalidVersion
+from packaging.specifiers import SpecifierSet
+from packaging.version import InvalidVersion, Version
 from packaging.version import parse as parse_version
 
 
@@ -15,17 +13,26 @@ def get_pyproject_dependencies(pyproject_path: Path) -> dict:
     if not deps:
         deps = data.get("tool", {}).get("poetry", {}).get("dependencies", {})
 
-    # Handle both dict- and list-style dependencies
-    if isinstance(deps, list):
-        parsed = {}
+    parsed = {}
+    if isinstance(deps, dict):
+        for name, version_spec in deps.items():
+            if isinstance(version_spec, str):
+                parsed[name] = version_spec.strip()
+            elif isinstance(version_spec, dict):
+                parsed[name] = version_spec.get("version", "*")
+    elif isinstance(deps, list):
         for entry in deps:
-            if "==" in entry:
-                name, version = entry.split("==", 1)
-                parsed[name.strip()] = f"=={version.strip()}"
-            else:
-                parsed[entry.strip()] = "*"
-        return parsed
-    return deps
+            try:
+                for op in ["==", ">=", "~=", "<=", ">", "<"]:
+                    if op in entry:
+                        name, version = entry.split(op, 1)
+                        parsed[name.strip()] = f"{op}{version.strip()}"
+                        break
+                else:
+                    parsed[entry.strip()] = "*"
+            except ValueError:
+                print(f"⚠️ Could not parse dependency: {entry}")
+    return parsed
 
 
 def get_pypi_metadata(package_name: str) -> dict | None:
@@ -37,7 +44,9 @@ def get_pypi_metadata(package_name: str) -> dict | None:
         return None
 
 
-def extract_repo_url(metadata: dict) -> str | None:
+def extract_repo_url(package_name: str, metadata: dict) -> str | None:
+    if package_name.startswith("types-"):
+        return "https://github.com/python/typeshed"
     urls = metadata["info"].get("project_urls", {})
     for key in ["Source", "Repository", "Homepage"]:
         url = urls.get(key, "")
@@ -61,28 +70,22 @@ def get_git_tags(owner: str, repo: str) -> list[str]:
         return []
 
 
-def find_matching_tag(tags: list[str], version: str) -> str | None:
-    parsed_target = parse_version(version)
+def find_best_matching_tag(
+    tags: list[str], specifier: SpecifierSet
+) -> tuple[str, Version] | None:
+    matching_versions = []
     for tag in tags:
+        cleaned = tag.lstrip("vV-").replace("version", "").strip("-")
         try:
-            parsed_tag = parse_version(tag.lstrip("v"))
-            if parsed_tag == parsed_target:
-                return tag
+            parsed = parse_version(cleaned)
+            if isinstance(parsed, Version) and parsed in specifier:
+                matching_versions.append((parsed, tag))
         except InvalidVersion:
             continue
+    if matching_versions:
+        best = max(matching_versions, key=lambda x: x[0])
+        return best[1], best[0]
     return None
-
-
-def clone_and_checkout(repo_url: str, tag: str) -> None:
-    temp_dir = tempfile.mkdtemp()
-    try:
-        repo = Repo.clone_from(repo_url, temp_dir)
-        repo.git.checkout(tag)
-        print(f"Cloned {repo_url} at tag {tag}")
-    except Exception as e:
-        print(f"Failed to clone {repo_url} at tag {tag}: {e}")
-    finally:
-        shutil.rmtree(temp_dir)
 
 
 def clean_dep_name(dep: str) -> str:
@@ -91,20 +94,20 @@ def clean_dep_name(dep: str) -> str:
 
 def process(pyproject_path: Path) -> None:
     deps = get_pyproject_dependencies(pyproject_path)
-    print(f"Loaded dependencies: {deps}")  # Debug print
+    print("\n🔍 Matched Dependencies:\n")
     if not deps:
         print("No dependencies found.")
         return
 
-    any_processed = False
     for dep, version_spec in deps.items():
-        if "==" not in version_spec:
-            continue
-
-        version = version_spec.split("==")[1].strip()
         base_name = clean_dep_name(dep)
 
-        print(f"Processing {base_name}=={version}...")
+        try:
+            spec = SpecifierSet(version_spec)
+        except Exception:
+            print(f"Skipping {base_name}: Invalid version specifier '{version_spec}'")
+            continue
+
         metadata = get_pypi_metadata(base_name)
         if not metadata:
             print(f"Could not fetch metadata for {base_name}")
@@ -114,7 +117,7 @@ def process(pyproject_path: Path) -> None:
             print(f"Skipping {base_name}: No classifiers")
             continue
 
-        repo_url = extract_repo_url(metadata)
+        repo_url = extract_repo_url(base_name, metadata)
         if not repo_url or "github.com" not in repo_url:
             print(f"No GitHub repo found for {base_name}")
             continue
@@ -127,19 +130,20 @@ def process(pyproject_path: Path) -> None:
 
         tags = get_git_tags(owner, repo)
         if not tags:
-            print(f"No tags found for {base_name}")
+            print(
+                f"Name: {base_name}\nVersion: {version_spec}\nRepo: {repo_url}\nTag: N/A (no tags found)\n"
+            )
             continue
 
-        tag = find_matching_tag(tags, version)
-        if not tag:
-            print(f"No matching tag for version {version}")
+        matched = find_best_matching_tag(tags, spec)
+        if not matched:
+            print(f"No matching tag for {base_name} ({version_spec})")
             continue
 
-        clone_and_checkout(repo_url, tag)
-        any_processed = True
-
-    if not any_processed:
-        print("Done. No dependencies matched the processing criteria.")
+        matched_tag, matched_version = matched
+        print(
+            f"Name: {base_name}\nVersion: {version_spec}\nRepo: {repo_url}\nTag: {matched_tag}\n"
+        )
 
 
 if __name__ == "__main__":
