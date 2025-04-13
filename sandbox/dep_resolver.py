@@ -31,7 +31,7 @@ def get_pyproject_dependencies(pyproject_path: Path) -> dict:
                 else:
                     parsed[entry.strip()] = "*"
             except ValueError:
-                print(f"⚠️ Could not parse dependency: {entry}")
+                print(f"Could not parse dependency: {entry}")
     return parsed
 
 
