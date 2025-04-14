@@ -14,7 +14,7 @@ llm:
   text_chunk_overlap: 128
   code_chunk_size: 512
   code_chunk_overlap: 128
-include_project: true
+include_project: false
 project_src: sandbox
 sources:
   - url: https://github.com/pallets/flask
