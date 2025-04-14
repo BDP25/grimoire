@@ -1,7 +1,6 @@
 import typer
 
 from grimoire import __version__
-from grimoire.add import add_cli
 from grimoire.ask import ask_cli
 from grimoire.flush import flush_cli
 from grimoire.init import init_cli
@@ -23,7 +22,6 @@ cli = typer.Typer(
     add_completion=False,
 )
 
-cli.add_typer(add_cli, name=None)
 cli.add_typer(ask_cli, name=None)
 cli.add_typer(flush_cli, name=None)
 cli.add_typer(init_cli, name=None)
