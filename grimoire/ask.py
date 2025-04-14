@@ -6,13 +6,10 @@ import typer
 from langchain_postgres import PGVector
 
 from grimoire.configuration import CONFIG_FILE_NAME, ProjectConfiguration
-from grimoire.helpers.rag import (
-    get_retrieval_chain,
-    setup_llm,
-    setup_vectorstore,
-    vectorstore_connection,
-)
+from grimoire.helpers.llm import setup_llm
+from grimoire.helpers.retriever import get_retrieval_chain
 from grimoire.helpers.typer import red_text
+from grimoire.helpers.vectorstore import setup_vectorstore, vectorstore_connection
 
 ask_cli = typer.Typer()
 
