@@ -17,6 +17,11 @@ def update(
         help="Path to the grimoire project",
     ),
 ) -> None:
+    """
+    Update the grimoire sources with the latest dependencies defined in the dependency files.
+
+    :param path: Path to the grimoire project
+    """
     config = ProjectConfiguration.load_from_yaml(path / CONFIG_FILE_NAME)
 
     config.sources = []
