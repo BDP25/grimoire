@@ -4,7 +4,7 @@ import psycopg
 import typer
 
 from grimoire.configuration import CONFIG_FILE_NAME, ProjectConfiguration
-from grimoire.helpers.rag import delete_vectorstore, vectorstore_connection
+from grimoire.helpers.vectorstore import delete_vectorstore, vectorstore_connection
 
 flush_cli = typer.Typer()
 

@@ -9,11 +9,10 @@ from langchain_postgres import PGVector
 from rich.progress import track
 
 from grimoire.configuration import CONFIG_FILE_NAME, ProjectConfiguration
-from grimoire.helpers.rag import (
+from grimoire.helpers.ingestion import code_ingestion, text_ingestion
+from grimoire.helpers.vectorstore import (
     clear_collection,
-    code_ingestion,
     setup_vectorstore,
-    text_ingestion,
     vectorstore_connection,
 )
 
