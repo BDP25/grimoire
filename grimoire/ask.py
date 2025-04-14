@@ -24,6 +24,13 @@ def ask(
         help="Path to the grimoire project",
     ),
 ) -> None:
+    """
+    Ask a question either with or without the RAG process (--skip-rag flag).
+
+    :param question: Question as a list of words.
+    :param skip_rag: Flag to skip the RAG process and use only the LLM.
+    :param path: Path to the grimoire project.
+    """
     if not os.getenv("LLM_API_KEY"):
         typer.echo("LLM_API_KEY environment variable is not set.")
         raise typer.Abort()

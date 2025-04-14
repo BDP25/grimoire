@@ -16,6 +16,11 @@ def flush(
         help="Path to the grimoire project",
     ),
 ) -> None:
+    """
+    Flush the whole vectorstore which contains all project embeddings.
+
+    :param path: Path to the grimoire project.
+    """
     config = ProjectConfiguration.load_from_yaml(path / CONFIG_FILE_NAME)
 
     if not typer.confirm("Do you really want to flush the vectorstore?", default=False):

@@ -14,6 +14,11 @@ def verify(
         help="Path to the grimoire project",
     ),
 ) -> None:
+    """
+    Verify the configuration of the project.
+
+    :param path: Path to the grimoire project.
+    """
     if not (path / CONFIG_FILE_NAME).exists():
         typer.echo("No configuration file found. Please run `grim init` first.")
         raise typer.Exit(code=1)

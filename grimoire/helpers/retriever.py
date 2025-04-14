@@ -44,6 +44,14 @@ Answer:
 def get_retrieval_chain(
     vectorstore: VectorStore, llm: BaseChatModel, config: LLMConfiguration
 ) -> RunnableSerializable:
+    """
+    Creates a retrieval chain using the provided vectorstore and LLM.
+
+    :param vectorstore: The vector store to use for retrieval.
+    :param llm: The language model to use for generating responses.
+    :param config: Configuration object containing LLM settings.
+    :return: A RunnableSerializable object representing the retrieval chain.
+    """
     # suppress grpc and glog logs
     os.environ["GRPC_VERBOSITY"] = "ERROR"
     os.environ["GLOG_MINLOGLEVEL"] = "2"
