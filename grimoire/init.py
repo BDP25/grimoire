@@ -54,7 +54,7 @@ def get_project_config(path: Path) -> ProjectConfiguration:
         project_src=project_src,
         llm=ingestion_config,
         db=db_config,
-        sources=DUMMY_SOURCES,
+        sources=DUMMY_SOURCES,  # TODO: add sources from dep files
     )
 
 
