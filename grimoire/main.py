@@ -5,6 +5,7 @@ from grimoire.ask import ask_cli
 from grimoire.flush import flush_cli
 from grimoire.init import init_cli
 from grimoire.sync import sync_cli
+from grimoire.update import update_cli
 from grimoire.verify import verify_cli
 
 CLI_NAME = "grimoire"
@@ -26,6 +27,7 @@ cli.add_typer(ask_cli, name=None)
 cli.add_typer(flush_cli, name=None)
 cli.add_typer(init_cli, name=None)
 cli.add_typer(sync_cli, name=None)
+cli.add_typer(update_cli, name=None)
 cli.add_typer(verify_cli, name=None)
 
 
