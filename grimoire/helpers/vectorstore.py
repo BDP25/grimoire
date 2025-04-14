@@ -9,6 +9,11 @@ from grimoire.configuration import DBConfiguration
 
 
 def embeddings() -> HuggingFaceEmbeddings:
+    """
+    Set up the embeddings for the application.
+
+    :return: An instance of the HuggingFaceEmbeddings initialized with the specified model.
+    """
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
     device = (
         "cuda"
@@ -28,6 +33,12 @@ def embeddings() -> HuggingFaceEmbeddings:
 
 
 def vectorstore_connection(db: DBConfiguration) -> str:
+    """
+    Set up the connection string for the vector store.
+
+    :param db: Database configuration object containing connection details.
+    :return: A connection string for the vector store.
+    """
     return PGVector.connection_string_from_db_params(
         driver="psycopg",
         host=db.host,
@@ -39,6 +50,13 @@ def vectorstore_connection(db: DBConfiguration) -> str:
 
 
 def setup_vectorstore(collection: str, connection: str) -> VectorStore | None:
+    """
+    Set up the vector store for the application.
+
+    :param collection: Name of the collection to be used.
+    :param connection: Connection string for the vector store.
+    :return: An instance of the PGVector vector store initialized with the specified collection and connection.
+    """
     try:
         return PGVector(
             collection_name=collection,
@@ -51,6 +69,12 @@ def setup_vectorstore(collection: str, connection: str) -> VectorStore | None:
 
 
 def clear_collection(collection: str, connection: str) -> None:
+    """
+    Clear the specified collection in the vector store.
+
+    :param collection: Name of the collection to be cleared.
+    :param connection: Connection string for the vector store.
+    """
     try:
         PGVector(
             connection=connection,
@@ -62,6 +86,11 @@ def clear_collection(collection: str, connection: str) -> None:
 
 
 def delete_vectorstore(connection: str) -> None:
+    """
+    Delete the vector store.
+
+    :param connection: Connection string for the vector store.
+    """
     try:
         PGVector(
             connection=connection,

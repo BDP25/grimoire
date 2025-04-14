@@ -33,6 +33,11 @@ cli.add_typer(verify_cli, name=None)
 def main(
     ctx: typer.Context,
 ) -> None:
+    """
+    Gets called when no subcommand is provided and displays the help message.
+
+    :param ctx: Typer context.
+    """
     if ctx.invoked_subcommand is None:
         typer.echo(ctx.get_help())
         raise typer.Exit()
@@ -40,4 +45,7 @@ def main(
 
 @cli.command("version", help="Print the version of the grim cli")
 def version() -> None:
+    """
+    Print the version of the grim cli.
+    """
     typer.echo(f"grim cli v{__version__}")

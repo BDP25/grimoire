@@ -27,6 +27,11 @@ def sync(
         help="Path to the grimoire project",
     ),
 ) -> None:
+    """
+    Sync the grimoire project with existing configuration and sources.
+
+    :param path: Path to the grimoire project.
+    """
     if not typer.confirm(
         f"Are you sure you want to sync the grimoire project at {path}?",
         default=False,

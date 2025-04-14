@@ -17,6 +17,10 @@ class YamlDumper(yaml.Dumper):
 
 
 class LLMConfiguration(BaseModel):
+    """
+    Configuration for the LLM defined and used in the project.
+    """
+
     collection: str
     k_results: int = 5
     score_threshold: float = 0.8
@@ -29,6 +33,8 @@ class LLMConfiguration(BaseModel):
 
 class DBConfiguration(BaseModel):
     """
+    Configuration for the database defined and used in the project.
+
     TODO: store password in a secure way!
     """
 
@@ -40,6 +46,10 @@ class DBConfiguration(BaseModel):
 
 
 class Source(BaseModel):
+    """
+    Representation of a text or code source in the project.
+    """
+
     url: str
     include_md: bool = True
     include_code: bool = False
@@ -55,10 +65,21 @@ class ProjectConfiguration(BaseModel):
 
     @classmethod
     def load_from_yaml(cls, file_path: Path) -> "ProjectConfiguration":  # noqa: B008
+        """
+        Load the project configuration from a YAML file.
+
+        :param file_path: Path to the YAML file.
+        :return: ProjectConfiguration instance.
+        """
         with open(file_path, encoding="utf-8") as f:
             return cls.model_validate(yaml.safe_load(f))
 
     def save_to_yaml(self, file_path: Path) -> None:
+        """
+        Save the project configuration to a YAML file.
+
+        :param file_path: Path to the YAML file.
+        """
         with open(file_path, "w", encoding="utf-8") as f:
             yaml.dump(
                 data=self.model_dump(), stream=f, Dumper=YamlDumper, sort_keys=False

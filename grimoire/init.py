@@ -65,6 +65,11 @@ def init(
         help="Path where grimoire project should be created",
     ),
 ) -> None:
+    """
+    Initialize a new grimoire project with questionaire.
+
+    :param path: Path where grimoire project should be created.
+    """
     file_path = path / CONFIG_FILE_NAME
 
     if not path.is_dir():
@@ -85,4 +90,5 @@ def init(
     Configuration: {file_path}
     Note: directly modify the "{CONFIG_FILE_NAME}" configuration to your needs.
     """.strip()
+
     typer.echo(f"\n{success_message}\n")  # required for better formatting
