@@ -34,13 +34,19 @@ sources:
     include_code: false
   - url: https://github.com/benoitc/gunicorn
     include_md: true
-    include_code: false
-  - url: https://github.com/tiangolo/fastapi.git
+    include_code: false  
+  - url: https://github.com/maxcountryman/flask-login
     include_md: true
-    include_code: false    
-  - url: https://github.com/encode/httpx.git
+    include_code: false  
+  - url: https://github.com/Flask-Middleware/flask-security
     include_md: true
     include_code: false 
-  - url: https://github.com/streamlit/streamlit.git
+  - url: https://github.com/jarus/flask-testing
+    include_md: true
+    include_code: false  
+  - url: https://github.com/flask-restful/flask-restful
+    include_md: true
+    include_code: false     
+  - url: https://github.com/maxcountryman/flask-bcrypt
     include_md: true
     include_code: false     

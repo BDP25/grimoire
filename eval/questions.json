@@ -1,24 +1,24 @@
 {
     "questions": [
       { "id": 1, "question": "How do I clone the Requests repository?" },
-      { "id": 2, "question": "How do I build a website with Streamlit? Please give an example code." },
+      { "id": 2, "question": "How do I integrate Flask-Login with Flask to manage user authentication?" },
       { "id": 3, "question": "What does the library '__future__'  do?" },
-      { "id": 4, "question": "Please share the link to the scource code of fastapi" },
-      { "id": 5, "question": "What are the key features of fastapi?" },
-      { "id": 6, "question": "What is HTTPX and how can I install it?" },
-      { "id": 7, "question": "How does the exception hierarchy look like for HTTPX?" },
-      { "id": 8, "question": "Please describe the behaviour of the Members of the Python community." },
-      { "id": 9, "question": "What are the advantages from Streamlit compared to Flask?" },
-      { "id": 10, "question": "What kind of dashboards can I create with Streamlit?" },
+      { "id": 4, "question": "What is the purpose of the 'remember_me' feature in Flask-Login?" },
+      { "id": 5, "question": "What does Flask-Testing provide for testing Flask applications?" },
+      { "id": 6, "question": "How can you set up unit tests for routes and views using Flask-Testing?"},
+      { "id": 7, "question": "What is the purpose of 'reqparse' in Flask-RESTful, and how do you use it for input validation?"},
+      { "id": 8, "question": "How do you handle exceptions and errors in Flask-RESTful?" },
+      { "id": 9, "question": "How does Flask-Bcrypt help in securing passwords in a Flask application?" },
+      { "id": 10, "question": "What is the relationship between Flask-Bcrypt and Flask-Login in managing user authentication?" },
       { "id": 11, "question": "Is there a module that contains transport adapters?" },
       { "id": 12, "question": "How do I write a test script for the library 'requests'?" },
-      { "id": 13, "question": "Which encoding does HTTPX use?" },
+      { "id": 13, "question": "What are the best practices for storing and managing hashed passwords in a Flask app?" },
       { "id": 14, "question": "Where can I get the information about the underlying network behaviour?" }, 
       { "id": 15, "question": "How can I connect to a SQLite database?" },
       { "id": 16, "question": "How can I create a basic blog application with Flask?" },
       { "id": 17, "question": "What are the requirements to use the library requests?" },
-      { "id": 18, "question": "For what can I use Streamlit?" },
-      { "id": 19, "question": "Is Streamlit open-source?" },
+      { "id": 18, "question": "What are the benefits of using Flask-RESTful over manually writing API routes in Flask?" },
+      { "id": 19, "question": "Is Flask open-source?" },
       { "id": 20, "question": "Why does the url_prefix in the blog blueprint of Flask not work?" },
       { "id": 21, "question": "What is the purpose of Migrate(app, db) in Flask-Migrate?" },
       { "id": 22, "question": "What CLI commands are available via flask db after integrating Flask-Migrate?" },
@@ -28,8 +28,8 @@
       { "id": 26, "question": "Does Flask-Migrate require Alembic to work?" },
       { "id": 27, "question": "Is Requests production-ready for large-scale HTTP usage?" },
       { "id": 28, "question": "Is Gunicorn framework-specific or can it serve any WSGI app?" },
-      { "id": 29, "question": "Is FastAPI built on WSGI or ASGI?" },
-      { "id": 30, "question": "Can HTTPX make both synchronous and asynchronous requests?" }
+      { "id": 29, "question": "What should I do if I want to restrict access to certain routes in Flask based on user roles?" },
+      { "id": 30, "question": "How do you configure Flask-Security for user authentication and roles in a Flask application?" }
     ]
   }
   
