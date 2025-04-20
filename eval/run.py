@@ -5,8 +5,8 @@ from pathlib import Path
 # Paths
 EVAL_FOLDER = Path(__file__).parent
 QUESTIONS_FILE = (
-    EVAL_FOLDER / "questions_test.json"
-)  # TODO: update to "questions.json" for final test
+    EVAL_FOLDER / "questions.json"
+)  
 RESULTS_TABLE_FILE = EVAL_FOLDER / "results.md"
 FULL_ANSWERS_FILE = EVAL_FOLDER / "full_answers.md"
 
