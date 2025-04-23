@@ -67,17 +67,18 @@ grim --help
  - Get an LLM API token (e.g. from https://aistudio.google.com/app/apikey)
  - Set the LLM_API_TOKEN environment variable to the token
 
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --help          Show this message and exit.                                  │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────╮
-│ version   Print the version of the grim cli                                  │
-│ ask       Ask a question with project context                                │
-│ sync      Sync the grimoire project with existing configuration              │
-│ verify    Verify the configuration of the project                            │
-│ add       Add a new dependency or document to the project                    │
-│ init      Initialize a new grimoire project                                  │
-╰──────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ───────────────────────────────────────────────────────────────────╮
+│ --help          Show this message and exit.                                 │
+╰─────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ──────────────────────────────────────────────────────────────────╮
+│ version   Print the version of the grim cli                                 │
+│ ask       Ask a question with project context                               │
+│ flush     Flush the whole vectorstore                                       │
+│ init      Initialize a new grimoire project                                 │
+│ sync      Sync the grimoire project with existing configuration             │
+│ update    Update the grimoire sources with the latest dependencies          │
+│ verify    Verify the configuration of the project                           │
+╰─────────────────────────────────────────────────────────────────────────────╯
 ```
 
 ### Development
