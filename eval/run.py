@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+
 from typer.testing import CliRunner
 
 from grimoire.main import cli
@@ -9,10 +10,10 @@ runner = CliRunner()
 
 # Define paths for evaluation assets
 EVAL_FOLDER = Path(__file__).parent
-QUESTIONS_FILE = EVAL_FOLDER / "questions.json" 
+QUESTIONS_FILE = EVAL_FOLDER / "questions.json"
 RESULTS_TABLE_FILE = EVAL_FOLDER / "results.md"
 FULL_ANSWERS_FILE = EVAL_FOLDER / "full_answers.md"
-JSON_ANSWERS_FILE = EVAL_FOLDER / "answers.json" # For evaluation
+JSON_ANSWERS_FILE = EVAL_FOLDER / "answers.json"  # For evaluation
 
 
 def load_questions() -> list[dict[str, str]]:
@@ -38,12 +39,14 @@ def query_grimoire_cli(question_text: str, use_rag: bool = True) -> str:
     if not use_rag:
         args.append("--skip-rag")
 
-    result = runner.invoke(cli, args)  
+    result = runner.invoke(cli, args)
 
     if result.exit_code != 0:
         raise RuntimeError(f"CLI error:\n{result.output}")
 
-    return result.output.strip().replace("Grimoire 🔮: ", "") # For scoring remove "Grimoire 🔮:"
+    return result.output.strip().replace(
+        "Grimoire 🔮: ", ""
+    )  # For scoring remove "Grimoire 🔮:"
 
 
 def truncate_answer(answer: str, length: int = 100) -> str:
@@ -82,7 +85,7 @@ def run_evaluation() -> None:
             f"### LLM Only:\n{answer_without_rag}\n\n"
             f"### LLM + RAG:\n{answer_with_rag}\n\n---\n"
         )
-        
+
         # Truncate answers for summary table
         short_answer_without_rag = truncate_answer(answer_without_rag)
         short_answer_with_rag = truncate_answer(answer_with_rag)
@@ -92,12 +95,14 @@ def run_evaluation() -> None:
         )
 
         # Neutral format for JSON (no bias labels)
-        json_answers.append({
-            "id": q["id"],
-            "question": question_text,
-            "answer_a": answer_without_rag,
-            "answer_b": answer_with_rag
-        })
+        json_answers.append(
+            {
+                "id": q["id"],
+                "question": question_text,
+                "answer_a": answer_without_rag,
+                "answer_b": answer_with_rag,
+            }
+        )
 
     # Save Markdown summary table
     with open(RESULTS_TABLE_FILE, "w", encoding="utf-8") as file:

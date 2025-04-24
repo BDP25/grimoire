@@ -1,13 +1,11 @@
-import os
 import json
+import os
 import re
 from pathlib import Path
 from typing import Any
 
-import torch
 from langchain.chat_models import init_chat_model
 from langchain_core.language_models.chat_models import BaseChatModel
-
 
 EVAL_FOLDER = Path(__file__).parent
 ANSWERS_FILE = EVAL_FOLDER / "answers.json"
@@ -15,22 +13,14 @@ SCORES_FILE = EVAL_FOLDER / "scores.md"
 
 # Set up LLM
 
+
 def setup_llm() -> BaseChatModel:
     """
     Initializes and returns a default LLM model (Gemini 2.0 Flash).
 
     :returns: a BaseChatModel instance ready to receive prompts
     """
-
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
-
-    device = (
-        "cuda"
-        if torch.cuda.is_available()
-        else "mps"
-        if torch.backends.mps.is_available()
-        else "cpu"
-    )
 
     return init_chat_model(
         "google_genai:gemini-2.0-flash",
@@ -110,9 +100,11 @@ def evaluate_answer(llm: Any, question: str, answer: str) -> str:
     response = llm.invoke(prompt)
     return extract_content(response)
 
+
 def load_answers_from_json() -> list[dict[str, str]]:
     with open(ANSWERS_FILE, encoding="utf-8") as f:
         return json.load(f)
+
 
 def evaluate_scores() -> None:
     data = load_answers_from_json()
