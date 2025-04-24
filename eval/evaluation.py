@@ -1,13 +1,44 @@
+import os
+import json
 import re
 from pathlib import Path
 from typing import Any
 
-from run import ask_question_with_grim, load_questions
+import torch
+from langchain.chat_models import init_chat_model
+from langchain_core.language_models.chat_models import BaseChatModel
 
-from grimoire.helpers.rag import setup_llm
 
 EVAL_FOLDER = Path(__file__).parent
+ANSWERS_FILE = EVAL_FOLDER / "answers.json"
 SCORES_FILE = EVAL_FOLDER / "scores.md"
+
+# Set up LLM
+
+def setup_llm() -> BaseChatModel:
+    """
+    Initializes and returns a default LLM model (Gemini 2.0 Flash).
+
+    :returns: a BaseChatModel instance ready to receive prompts
+    """
+
+    os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
+    device = (
+        "cuda"
+        if torch.cuda.is_available()
+        else "mps"
+        if torch.backends.mps.is_available()
+        else "cpu"
+    )
+
+    return init_chat_model(
+        "google_genai:gemini-2.0-flash",
+        api_key=os.getenv("LLM_API_KEY"),
+        configurable_fields=None,
+        max_tokens=512,
+        temperature=0,
+    )
 
 
 def extract_score(text: str) -> str:
@@ -35,7 +66,6 @@ def extract_content(response: Any) -> str:
     if isinstance(content, str):
         return content.strip()
     if isinstance(content, list) and content:
-        # take the first string from the list (if any)
         for item in content:
             if isinstance(item, str):
                 return item.strip()
@@ -54,8 +84,13 @@ def build_score_prompt(question: str, answer: str) -> str:
     """
     return (
         f"Evaluate the following answer to the question. "
-        f"Please provide only a numeric score from 0 to 10, where 10 is perfect and 0 is completely wrong. "
-        f"Respond with the number only.\n\n"
+        f"Score from 0 to 10 based on how accurate and relevant the answer is, "
+        f"and also whether the response is concise and focused. "
+        f"Long-winded or overly verbose answers should be penalized. "
+        f"Prefer answers that are short but contain all key information.\n\n"
+        f"Please provide only a numeric score from 0 to 10 (no text), where:\n"
+        f"- 10 = perfect: complete, correct, and concise\n"
+        f"- 0 = completely wrong or irrelevant\n\n"
         f"Question:\n{question}\n\n"
         f"Answer:\n{answer}\n\n"
         f"Score:"
@@ -75,14 +110,12 @@ def evaluate_answer(llm: Any, question: str, answer: str) -> str:
     response = llm.invoke(prompt)
     return extract_content(response)
 
+def load_answers_from_json() -> list[dict[str, str]]:
+    with open(ANSWERS_FILE, encoding="utf-8") as f:
+        return json.load(f)
 
 def evaluate_scores() -> None:
-    """
-    Compares Answer A and B without disclosing origin; returns scores via LLM.
-
-    :returns: None
-    """
-    questions = load_questions()
+    data = load_answers_from_json()
     scores = [
         "# Evaluation Scores\n",
         "| ID | Question | Score A | Score B | Comment |",
@@ -91,10 +124,11 @@ def evaluate_scores() -> None:
 
     llm = setup_llm()
 
-    for q in questions:
-        question_text = q["question"]
-        answer_a = ask_question_with_grim(question_text, skip_rag=True)
-        answer_b = ask_question_with_grim(question_text, skip_rag=False)
+    for entry in data:
+        question_id = entry["id"]
+        question_text = entry["question"]
+        answer_a = entry["answer_a"]
+        answer_b = entry["answer_b"]
 
         score_a = evaluate_answer(llm, question_text, answer_a)
         score_b = evaluate_answer(llm, question_text, answer_b)
@@ -109,11 +143,11 @@ def evaluate_scores() -> None:
         comment = extract_content(llm.invoke(comment_prompt))
 
         scores.append(
-            f"| {q['id']} | {question_text} | {score_a} | {score_b} | {comment} |"
+            f"| {question_id} | {question_text} | {score_a} | {score_b} | {comment} |"
         )
 
-    with open(SCORES_FILE, "w", encoding="utf-8") as file:
-        file.write("\n".join(scores))
+    with open(SCORES_FILE, "w", encoding="utf-8") as f:
+        f.write("\n".join(scores))
 
     print(f"Scoring completed!\nScores saved: {SCORES_FILE}")
 
