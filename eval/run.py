@@ -1,65 +1,89 @@
 import json
-import subprocess
 from pathlib import Path
+from typer.testing import CliRunner
 
-# Paths
+from grimoire.main import cli
+
+# Initialize CLI runner for testing and evaluation
+runner = CliRunner()
+
+# Define paths for evaluation assets
 EVAL_FOLDER = Path(__file__).parent
-QUESTIONS_FILE = (
-    EVAL_FOLDER / "questions.json"
-)  
+QUESTIONS_FILE = EVAL_FOLDER / "questions.json" 
 RESULTS_TABLE_FILE = EVAL_FOLDER / "results.md"
 FULL_ANSWERS_FILE = EVAL_FOLDER / "full_answers.md"
+JSON_ANSWERS_FILE = EVAL_FOLDER / "answers.json" # For evaluation
 
 
 def load_questions() -> list[dict[str, str]]:
-    """Loads questions from the JSON file."""
+    """
+    Load evaluation questions from the questions.json file.
+
+    :returns: A list of dictionaries containing question IDs and question text.
+    """
     with open(QUESTIONS_FILE, encoding="utf-8") as file:
         data = json.load(file)
     return data["questions"]
 
 
-def ask_question_with_grim(question_text: str, skip_rag: bool = False) -> str:
-    """Asks the Grimoire CLI for an answer, ensuring UTF-8 output encoding."""
-    cmd = ["grim", "ask", question_text]
-    if skip_rag:
-        cmd.append("--skip-rag")
+def query_grimoire_cli(question_text: str, use_rag: bool = True) -> str:
+    """
+    Invoke the Grimoire CLI using CliRunner to answer a question.
 
-    result = subprocess.run(
-        cmd,
-        capture_output=True,
-        text=True,
-        encoding="utf-8",
-        errors="ignore",
-        check=True,
-    )
+    :param question_text: The input question to ask the CLI.
+    :param use_rag: Whether to use RAG (retrieval-augmented generation). If False, the --skip-rag flag is added.
+    :returns: The CLI output as a cleaned string (Grimoire prompt removed).
+    """
+    args = ["ask", question_text]
+    if not use_rag:
+        args.append("--skip-rag")
 
-    # Clean output by removing unnecessary prefixes
-    answer = result.stdout.strip().replace("Grimoire 🔮: ", "")
-    return answer
+    result = runner.invoke(cli, args)  
+
+    if result.exit_code != 0:
+        raise RuntimeError(f"CLI error:\n{result.output}")
+
+    return result.output.strip().replace("Grimoire 🔮: ", "") # For scoring remove "Grimoire 🔮:"
 
 
 def truncate_answer(answer: str, length: int = 100) -> str:
-    """Truncates long answers and appends a reference to the full answer."""
+    """
+    Truncate long answers for table display and add ellipsis.
+
+    :param answer: The full answer text.
+    :param length: The maximum number of characters to retain.
+    :returns: A shortened version of the answer with ellipsis if truncated.
+    """
     return answer[:length] + "..." if len(answer) > length else answer
 
 
 def run_evaluation() -> None:
-    """Runs the evaluation and stores results in a readable format."""
+    """
+    Run the evaluation process for a set of questions.
+
+    It executes Grimoire CLI queries with and without RAG, collects and saves results
+    in Markdown format, and prints summary information.
+    """
     questions = load_questions()
     table_results = []
-    full_answers = ["# Evaluation\n"]
+    full_answers_md = ["# Evaluation\n"]
+    json_answers = []
 
     for q in questions:
         question_text = q["question"]
-        answer_with_rag = ask_question_with_grim(question_text)
-        answer_without_rag = ask_question_with_grim(question_text, skip_rag=True)
 
-        # Store full answers separately
-        full_answers.append(
-            f"## Q{q['id']}: {question_text}\n\n### LLM Only:\n{answer_without_rag}\n\n### LLM + RAG:\n{answer_with_rag}\n\n---\n"
+        # Ask with and without RAG
+        answer_with_rag = query_grimoire_cli(question_text, use_rag=True)
+        answer_without_rag = query_grimoire_cli(question_text, use_rag=False)
+
+        # Save full answers for review
+        full_answers_md.append(
+            f"## Q{q['id']}: {question_text}\n\n"
+            f"### LLM Only:\n{answer_without_rag}\n\n"
+            f"### LLM + RAG:\n{answer_with_rag}\n\n---\n"
         )
-
-        # Truncate answers for table readability
+        
+        # Truncate answers for summary table
         short_answer_without_rag = truncate_answer(answer_without_rag)
         short_answer_with_rag = truncate_answer(answer_with_rag)
 
@@ -67,18 +91,33 @@ def run_evaluation() -> None:
             f"| {q['id']} | {question_text} | {short_answer_without_rag} | {short_answer_with_rag} |"
         )
 
-    # Write markdown table
+        # Neutral format for JSON (no bias labels)
+        json_answers.append({
+            "id": q["id"],
+            "question": question_text,
+            "answer_a": answer_without_rag,
+            "answer_b": answer_with_rag
+        })
+
+    # Save Markdown summary table
     with open(RESULTS_TABLE_FILE, "w", encoding="utf-8") as file:
         file.write("| ID | Question | Answer (LLM Only) | Answer (LLM + RAG) |\n")
         file.write("|----|----------|------------------|-------------------|\n")
         file.write("\n".join(table_results))
 
-    # Write full answers separately
+    # Save full answers separately
     with open(FULL_ANSWERS_FILE, "w", encoding="utf-8") as file:
-        file.write("\n".join(full_answers))
+        file.write("\n".join(full_answers_md))
+
+    # Save JSON for scoring
+    with open(JSON_ANSWERS_FILE, "w", encoding="utf-8") as file:
+        json.dump(json_answers, file, indent=2, ensure_ascii=False)
 
     print(
-        f"Evaluation completed!\n Table saved: {RESULTS_TABLE_FILE}\n Full answers saved: {FULL_ANSWERS_FILE}"
+        f"Evaluation completed!\n"
+        f"Table saved: {RESULTS_TABLE_FILE}\n"
+        f"Full answers saved: {FULL_ANSWERS_FILE}\n"
+        f"JSON saved: {JSON_ANSWERS_FILE}"
     )
 
 
