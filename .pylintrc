@@ -42,4 +42,5 @@ disable=
     too-many-instance-attributes,
     redefined-outer-name,
     import-outside-toplevel,
+    too-complex,
     fixme
