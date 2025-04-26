@@ -8,7 +8,11 @@ from git import Repo
 from langchain_postgres import PGVector
 from rich.progress import track
 
-from grimoire.configuration import CONFIG_FILE_NAME, ProjectConfiguration
+from grimoire.configuration import (
+    CONFIG_FILE_NAME,
+    ProjectConfiguration,
+    get_recursive_config,
+)
 from grimoire.helpers.ingestion import code_ingestion, text_ingestion
 from grimoire.helpers.vectorstore import (
     clear_collection,
@@ -23,7 +27,7 @@ sync_cli = typer.Typer()
 @sync_cli.command("sync", help="Sync the grimoire project with existing configuration")
 def sync(
     path: Path = typer.Argument(  # noqa: B008
-        Path.cwd(),  # noqa: B008
+        get_recursive_config(),  # noqa: B008
         help="Path to the grimoire project",
     ),
 ) -> None:

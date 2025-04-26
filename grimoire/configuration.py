@@ -1,13 +1,39 @@
+import sys
 from pathlib import Path
 
 import typer
 import yaml
 from pydantic import BaseModel, ConfigDict, ValidationError
 
-from grimoire.helpers.typer import validation_error
+from grimoire.helpers.typer import red_text, validation_error
 
 CONFIG_FILE_NAME = "grimoire.yaml"
 MODEL_CONFIG_DICT = ConfigDict(extra="forbid")
+CONFIG_FILE_RECURSIVE_STEPS = 3
+
+
+def get_recursive_config(
+    path: Path = Path.cwd(),  # noqa: B008
+    steps: int = CONFIG_FILE_RECURSIVE_STEPS,
+) -> Path:
+    """
+    Recursive try to find the grimoire.yaml file
+
+    :path: starting path to search
+    :steps: number of steps to go up the directory tree
+    :return: path to the grimoire.yaml file
+    """
+    start_path = path
+    for _ in range(steps + 1):
+        if (path / CONFIG_FILE_NAME).exists():
+            return path
+        path = path.parent
+    typer.echo(
+        red_text(
+            f"'{CONFIG_FILE_NAME}' not found in '{start_path}' or any of its {steps} parent directories."
+        )
+    )
+    sys.exit(1)
 
 
 # see: https://stackoverflow.com/questions/25108581/python-yaml-dump-bad-indentation
