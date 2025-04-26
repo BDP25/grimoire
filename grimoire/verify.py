@@ -3,6 +3,7 @@ from pathlib import Path
 import typer
 
 from grimoire.configuration import CONFIG_FILE_NAME, ProjectConfiguration
+from grimoire.helpers.typer import green_text
 
 verify_cli = typer.Typer()
 
@@ -24,5 +25,4 @@ def verify(
         raise typer.Exit(code=1)
     typer.echo("Verifying configuration")
     config = ProjectConfiguration.load_from_yaml(path / CONFIG_FILE_NAME)
-    prefix = typer.style("Successful for", fg=typer.colors.GREEN, bold=True)
-    typer.echo(f"{prefix}: {config.name}")
+    typer.echo(f"{green_text('Successful for')}: {config.name}")

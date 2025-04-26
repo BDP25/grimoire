@@ -1,9 +1,13 @@
 from pathlib import Path
 
+import typer
 import yaml
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict, ValidationError
+
+from grimoire.helpers.typer import validation_error
 
 CONFIG_FILE_NAME = "grimoire.yaml"
+MODEL_CONFIG_DICT = ConfigDict(extra="forbid")
 
 
 # see: https://stackoverflow.com/questions/25108581/python-yaml-dump-bad-indentation
@@ -30,6 +34,8 @@ class LLMConfiguration(BaseModel):
     code_chunk_size: int = 512
     code_chunk_overlap: int = 128
 
+    model_config = MODEL_CONFIG_DICT
+
 
 class DBConfiguration(BaseModel):
     """
@@ -44,6 +50,8 @@ class DBConfiguration(BaseModel):
     user: str
     password: str
 
+    model_config = MODEL_CONFIG_DICT
+
 
 class Source(BaseModel):
     """
@@ -54,6 +62,8 @@ class Source(BaseModel):
     include_md: bool = True
     include_code: bool = False
 
+    model_config = MODEL_CONFIG_DICT
+
 
 class ProjectConfiguration(BaseModel):
     name: str
@@ -63,6 +73,8 @@ class ProjectConfiguration(BaseModel):
     project_src: str | None = None
     sources: list[Source] | None = None
 
+    model_config = MODEL_CONFIG_DICT
+
     @classmethod
     def load_from_yaml(cls, file_path: Path) -> "ProjectConfiguration":  # noqa: B008
         """
@@ -71,8 +83,12 @@ class ProjectConfiguration(BaseModel):
         :param file_path: Path to the YAML file.
         :return: ProjectConfiguration instance.
         """
-        with open(file_path, encoding="utf-8") as f:
-            return cls.model_validate(yaml.safe_load(f))
+        try:
+            with open(file_path, encoding="utf-8") as f:
+                return cls.model_validate(yaml.safe_load(f))
+        except ValidationError as e:
+            typer.echo(validation_error(e))
+            raise typer.Exit(code=1) from e
 
     def save_to_yaml(self, file_path: Path) -> None:
         """
