@@ -52,16 +52,14 @@ def sync(
         typer.echo("Error connecting to the database")
         raise e
 
-    vectorstore = setup_vectorstore(config.llm.collection, connection)
-    vectorstore = cast(PGVector, vectorstore)  # hack to avoid mypy error
+    text_splits = []
+    code_splits = []
 
     if config.include_project:
-        text_splits = text_ingestion(path, config.llm, exclude=DEFAULT_EXCLUDE)
-        code_splits = code_ingestion(
+        text_splits += text_ingestion(path, config.llm, exclude=DEFAULT_EXCLUDE)
+        code_splits += code_ingestion(
             path, config.llm, glob=f"{config.project_src}/**/*"
         )
-        vectorstore.add_documents(text_splits)
-        vectorstore.add_documents(code_splits)
 
     for repo in track(config.sources, description="Processing sources"):
         if not repo.include_md and not repo.include_code:
@@ -72,9 +70,17 @@ def sync(
             Repo.clone_from(repo.url, to_path=temp_path)
 
             if repo.include_md:
-                text_splits = text_ingestion(temp_path, config.llm)
-                vectorstore.add_documents(text_splits)
+                text_splits += text_ingestion(temp_path, config.llm)
 
             if repo.include_code:
-                code_splits = code_ingestion(temp_path, config.llm)
-                vectorstore.add_documents(code_splits)
+                code_splits += code_ingestion(temp_path, config.llm)
+
+    if text_splits or code_splits:
+        vectorstore = setup_vectorstore(config.llm.collection, connection)
+        vectorstore = cast(PGVector, vectorstore)  # hack to avoid mypy error
+
+        if text_splits:
+            vectorstore.add_documents(text_splits, metadata={"source": "text"})
+
+        if code_splits:
+            vectorstore.add_documents(code_splits, metadata={"source": "code"})
