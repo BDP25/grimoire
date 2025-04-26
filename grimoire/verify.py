@@ -2,7 +2,11 @@ from pathlib import Path
 
 import typer
 
-from grimoire.configuration import CONFIG_FILE_NAME, ProjectConfiguration
+from grimoire.configuration import (
+    CONFIG_FILE_NAME,
+    ProjectConfiguration,
+    get_recursive_config,
+)
 from grimoire.helpers.typer import green_text
 
 verify_cli = typer.Typer()
@@ -11,7 +15,7 @@ verify_cli = typer.Typer()
 @verify_cli.command("verify", help="Verify the configuration of the project")
 def verify(
     path: Path = typer.Argument(  # noqa: B008
-        Path.cwd(),  # noqa: B008
+        get_recursive_config(),  # noqa: B008
         help="Path to the grimoire project",
     ),
 ) -> None:

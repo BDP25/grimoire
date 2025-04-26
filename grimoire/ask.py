@@ -5,7 +5,11 @@ from typing import cast
 import typer
 from langchain_postgres import PGVector
 
-from grimoire.configuration import CONFIG_FILE_NAME, ProjectConfiguration
+from grimoire.configuration import (
+    CONFIG_FILE_NAME,
+    ProjectConfiguration,
+    get_recursive_config,
+)
 from grimoire.helpers.llm import setup_llm
 from grimoire.helpers.retriever import get_retrieval_chain
 from grimoire.helpers.typer import red_text
@@ -19,7 +23,7 @@ def ask(
     question: list[str],
     skip_rag: bool = typer.Option(False, "--skip-rag", help="Skip the RAG process"),
     path: Path = typer.Option(  # noqa: B008
-        Path.cwd(),  # noqa: B008
+        get_recursive_config(),  # noqa: B008
         "--path",
         help="Path to the grimoire project",
     ),
