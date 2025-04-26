@@ -35,7 +35,7 @@ def ask(
         typer.echo("LLM_API_KEY environment variable is not set.")
         raise typer.Abort()
 
-    typer.echo(f"{red_text('Grimoire 🔮: ')}", nl=False)
+    typer.echo(f"{red_text('Grimoire 🔮: ')}")
     question_str = " ".join(question)
 
     llm = setup_llm()
