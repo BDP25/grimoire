@@ -13,3 +13,4 @@ dist/
 coverage.xml
 junit.xml
 pylint_results.xml
+repomix-output.xml
