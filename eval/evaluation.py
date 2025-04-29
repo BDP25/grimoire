@@ -11,8 +11,6 @@ EVAL_FOLDER = Path(__file__).parent
 ANSWERS_FILE = EVAL_FOLDER / "answers.json"
 SCORES_FILE = EVAL_FOLDER / "scores.md"
 
-# Set up LLM
-
 
 def setup_llm() -> BaseChatModel:
     """
