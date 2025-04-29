@@ -10,6 +10,7 @@ ignore-paths=
     ^.*/__pycache__/.*$,
     ^.*/tests/.*$,
     sandbox/.*$,
+    eval/.*$,
 
 load-plugins=
     pylint.extensions.check_elif,
@@ -42,4 +43,5 @@ disable=
     too-many-instance-attributes,
     redefined-outer-name,
     import-outside-toplevel,
+    too-complex,
     fixme
