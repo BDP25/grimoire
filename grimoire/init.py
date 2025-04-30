@@ -54,7 +54,7 @@ def get_project_config(path: Path) -> ProjectConfiguration:
         project_src=project_src,
         llm=ingestion_config,
         db=db_config,
-        sources=DUMMY_SOURCES,
+        sources=DUMMY_SOURCES,  # TODO: add sources from dep files
     )
 
 
@@ -65,6 +65,11 @@ def init(
         help="Path where grimoire project should be created",
     ),
 ) -> None:
+    """
+    Initialize a new grimoire project with questionaire.
+
+    :param path: Path where grimoire project should be created.
+    """
     file_path = path / CONFIG_FILE_NAME
 
     if not path.is_dir():
@@ -85,4 +90,5 @@ def init(
     Configuration: {file_path}
     Note: directly modify the "{CONFIG_FILE_NAME}" configuration to your needs.
     """.strip()
+
     typer.echo(f"\n{success_message}\n")  # required for better formatting

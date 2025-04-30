@@ -1,4 +1,5 @@
 import typer
+from pydantic import ValidationError
 
 
 def blue_text(text: str, bold: bool = True) -> str:
@@ -32,3 +33,14 @@ def green_text(text: str, bold: bool = True) -> str:
     :return: colored text
     """
     return typer.style(text, fg=typer.colors.GREEN, bold=bold)
+
+
+def validation_error(error: ValidationError) -> str:
+    """
+    Returns the validation error in red color
+
+    :param error: validation error
+    :return: colored error message
+    """
+    prefix = red_text("Error in configuration file")
+    return f"{prefix}: {error}"

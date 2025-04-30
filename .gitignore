@@ -13,4 +13,3 @@ dist/
 coverage.xml
 junit.xml
 pylint_results.xml
-.DS_Store
