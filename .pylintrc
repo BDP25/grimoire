@@ -10,6 +10,7 @@ ignore-paths=
     ^.*/__pycache__/.*$,
     ^.*/tests/.*$,
     sandbox/.*$,
+    eval/.*$,
 
 load-plugins=
     pylint.extensions.check_elif,
