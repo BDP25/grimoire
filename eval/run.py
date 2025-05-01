@@ -1,11 +1,15 @@
 import json
 from pathlib import Path
 
-from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
+from tenacity import (
+    retry,
+    retry_if_exception_type,
+    stop_after_attempt,
+    wait_exponential,
+)
 from typer.testing import CliRunner
 
 from grimoire.main import cli
-
 
 # Initialize CLI runner for testing and evaluation
 runner = CliRunner()
@@ -28,10 +32,11 @@ def load_questions() -> list[dict[str, str]]:
         data = json.load(file)
     return data["questions"]
 
+
 @retry(
     stop=stop_after_attempt(5),
     wait=wait_exponential(multiplier=1, min=10, max=60),
-    retry=retry_if_exception_type(RuntimeError)
+    retry=retry_if_exception_type(RuntimeError),
 )
 def query_grimoire_cli(question_text: str, use_rag: bool = True) -> str:
     """

@@ -1,20 +1,26 @@
 import json
 import os
 import re
+import time
 from pathlib import Path
-from typing import Any, List
+from typing import Any
 
 from langchain.chat_models import init_chat_model
 from langchain_core.language_models.chat_models import BaseChatModel
-from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
-import time
+from tenacity import (
+    retry,
+    retry_if_exception_type,
+    stop_after_attempt,
+    wait_exponential,
+)
 
 EVAL_FOLDER = Path(__file__).parent
 ANSWERS_FILE = EVAL_FOLDER / "answers.json"
 SCORES_FILE = EVAL_FOLDER / "scores.md"
 
-BATCH_SIZE = 5  
-BATCH_DELAY = 60  
+BATCH_SIZE = 5
+BATCH_DELAY = 60
+
 
 def setup_llm() -> BaseChatModel:
     """
@@ -87,7 +93,7 @@ def build_score_prompt(question: str, answer: str) -> str:
 @retry(
     stop=stop_after_attempt(5),
     wait=wait_exponential(multiplier=1, min=10, max=60),
-    retry=retry_if_exception_type(Exception)
+    retry=retry_if_exception_type(Exception),
 )
 def evaluate_answer(llm: Any, question: str, answer: str) -> str:
     """
@@ -105,9 +111,11 @@ def evaluate_answer(llm: Any, question: str, answer: str) -> str:
 @retry(
     stop=stop_after_attempt(5),
     wait=wait_exponential(multiplier=1, min=10, max=60),
-    retry=retry_if_exception_type(Exception)
+    retry=retry_if_exception_type(Exception),
 )
-def get_comparison_comment(llm: Any, question: str, answer_a: str, answer_b: str, score_a: str, score_b: str) -> str:
+def get_comparison_comment(
+    llm: Any, question: str, answer_a: str, answer_b: str, score_a: str, score_b: str
+) -> str:
     """
     Gets a short reason for rating two answers differently from the LLM, now explicitly referencing the score differences.
     :param llm: the language model instance
@@ -129,7 +137,6 @@ def get_comparison_comment(llm: Any, question: str, answer_a: str, answer_b: str
     return extract_content(response)
 
 
-
 def load_answers_from_json() -> list[dict[str, str]]:
     """
     Loads the answers from a JSON file for evaluation.
@@ -139,7 +146,7 @@ def load_answers_from_json() -> list[dict[str, str]]:
         return json.load(f)
 
 
-def evaluate_batch(llm: Any, batch: List[dict]) -> List[str]:
+def evaluate_batch(llm: Any, batch: list[dict]) -> list[str]:
     """
     Evaluates a batch of questions and answers using the LLM.
     :param llm: the language model instance
@@ -156,9 +163,11 @@ def evaluate_batch(llm: Any, batch: List[dict]) -> List[str]:
         # Evaluating scores for both answers
         score_a = evaluate_answer(llm, question_text, answer_a)
         score_b = evaluate_answer(llm, question_text, answer_b)
-        
+
         # Getting the comparison comment considering the scores
-        comment = get_comparison_comment(llm, question_text, answer_a, answer_b, score_a, score_b)
+        comment = get_comparison_comment(
+            llm, question_text, answer_a, answer_b, score_a, score_b
+        )
 
         results.append(
             f"| {question_id} | {question_text} | {score_a} | {score_b} | {comment} |"
@@ -181,14 +190,16 @@ def evaluate_scores() -> None:
     llm = setup_llm()
 
     for i in range(0, len(data), BATCH_SIZE):
-        batch = data[i:i + BATCH_SIZE]
+        batch = data[i : i + BATCH_SIZE]
 
         batch_results = evaluate_batch(llm, batch)
 
         scores.extend(batch_results)
 
         if i + BATCH_SIZE < len(data):
-            print(f"Processed batch {i // BATCH_SIZE + 1}. Waiting {BATCH_DELAY} seconds before next batch.")
+            print(
+                f"Processed batch {i // BATCH_SIZE + 1}. Waiting {BATCH_DELAY} seconds before next batch."
+            )
             time.sleep(BATCH_DELAY)
 
     with open(SCORES_FILE, "w", encoding="utf-8") as f:
