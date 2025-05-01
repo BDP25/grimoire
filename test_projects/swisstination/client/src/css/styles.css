@@ -1,0 +1,30 @@
+@import "variables.css";
+@import "fonts.css";
+@import "typography.css";
+
+/* Components */
+@import "components/badge.css";
+@import "components/button.css";
+@import "components/card.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+router-link:hover {
+  cursor: pointer;
+}
+
+/* 
+turns of route description overlay
+https://github.com/perliedman/leaflet-routing-machine/issues/608
+*/
+.leaflet-control-container .leaflet-routing-container-hide {
+  display: none;
+}
+
+div.leaflet-top.leaflet-right {
+  display: none !important;
+  width: 0px !important;
+  height: 0px !important;
+}

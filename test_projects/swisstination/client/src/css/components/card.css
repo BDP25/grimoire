@@ -1,0 +1,25 @@
+@tailwind components;
+
+.card {
+  border: theme("borderWidth.2") solid theme("colors.black");
+  width: theme("width.full");
+  border-radius: theme("borderRadius.md");
+  background-color: theme("colors.white");
+}
+
+.card-figure {
+  @apply w-full h-1/2 border-black border-b-2;
+}
+
+.card-content {
+  @apply px-6 py-5 text-left h-full;
+}
+.card-subtitle {
+  @apply text-base mb-4 font-vg5000;
+}
+.card-title {
+  @apply text-[24px] mb-4 font-vg5000;
+}
+.card-text {
+  @apply text-xs mb-4 line-clamp-4;
+}

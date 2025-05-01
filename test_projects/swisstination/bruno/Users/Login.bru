@@ -1,0 +1,19 @@
+meta {
+  name: Login
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://127.0.0.1:5000/api/v1/users/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "username": "AnnaHiker",
+    "email": "anna@swisstination.io",
+    "password": "AnnaHiker"
+  }
+}

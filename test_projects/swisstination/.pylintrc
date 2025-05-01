@@ -1,0 +1,48 @@
+[MAIN]
+
+ignore=
+    .venv,
+    .git,
+    .pytest_cache,
+    .mypy_cache,
+    node_modules,
+ignore-paths=
+    ^.*/__pycache__/.*$,
+    ^.*/tests/.*$,
+
+load-plugins=
+    # Copied from https://www.codeac.io/documentation/pylint-configuration.html
+    pylint.extensions.check_elif,
+    pylint.extensions.bad_builtin,
+    pylint.extensions.docparams,
+    pylint.extensions.for_any_all,
+    pylint.extensions.set_membership,
+    pylint.extensions.code_style,
+    pylint.extensions.overlapping_exceptions,
+    pylint.extensions.typing,
+    pylint.extensions.redefined_variable_type,
+    pylint.extensions.comparison_placement,
+    pylint.extensions.mccabe,
+    # Additional plugins to use
+    pylint_flask,
+    pylint_junit,
+
+[MESSAGES CONTROL]
+
+disable=
+    # Some checks have been disabled for this Flask project
+    broad-exception-caught,
+    missing-docstring,
+    format, # ignore formatting issues (handled by ruff)
+    wildcard-import,
+    unused-wildcard-import,
+    duplicate-code,
+    protected-access,
+    abstract-method,
+    too-many-ancestors,
+    too-few-public-methods,
+    too-many-arguments,
+    too-many-locals,
+    too-many-instance-attributes,
+    redefined-outer-name,
+    import-outside-toplevel

@@ -1,0 +1,98 @@
+[tool.poetry]
+name = "swisstination"
+version = "0.1.0"
+description = "ZHAW PM3 project."
+authors = []
+license = ""
+readme = "README.md"
+repository = "https://github.com/JohnTrunix/swisstination"
+package-mode = false
+classifiers = [
+    "Environment :: Web Environment",
+    "Framework :: Flask",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Internet :: WWW/HTTP",
+]
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.13"
+flask = "^3.0.3"
+pymongo = "^4.9.1"
+pydantic = {extras = ["email"], version = "^2.9.2"}
+flask-bcrypt = "^1.0.1"
+email-validator = "^2.2.0"
+flask-cors = "^5.0.0"
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.11.2"
+pytest = "^8.3.3"
+pytest-cov = "^5.0.0"
+pytest-clarity = "^1.0.1"
+pytest-deadfixtures = "^2.2.1"
+poethepoet = "^0.28.0"
+coverage = "^7.6.1"
+ruff = "^0.6.6"
+flake8 = "^7.1.1"
+pylint-junit = "^0.3.4"
+pylint-flask = "^0.6"
+pytest-custom-exit-code = "^0.3.0"
+mongomock = "^4.2.0.post1"
+pytest-mock = "^3.14.0"
+pre-commit = "^4.0.1"
+
+[tool.poe.tasks]
+format = {shell = "ruff format && ruff check --fix"}
+lint = {shell = "ruff check && flake8 . && pytest --dead-fixtures && poe pylint"}
+types = {shell = "mypy ."}
+test = {shell = "pytest"}
+all = {shell = "poe format && poe lint && poe types && poe test"}
+dev = "flask --app app.main --debug run"
+ingest-amenities = {shell = "python ingest.py --db swisstination --collection amenities --drop data/osm-output.json"}
+ingest-tours = {shell = "python ingest.py --db swisstination --collection tours --drop data/tours.json"}
+ingest-users = {shell = "python data/generator.py && python ingest.py --db swisstination --collection users --drop data/users.json"}
+ingest = {shell = "poe ingest-amenities && poe ingest-users && poe ingest-tours"}
+
+[tool.poe.tasks.pylint]
+shell = "pylint -j 0 --exit-zero --recursive=y --output-format=${output_format} ${extra} ."
+args = [
+    { name = "output_format", options = ["--output-format"], default = "text" },
+    { name = "extra", options = ["--extra"], default = "" },
+]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.mypy]
+ignore_missing_imports = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+disallow_untyped_calls = true
+exclude = [".venv/", "tests/", "conftest.py"]
+
+[tool.pytest.ini_options]
+addopts = "--cov . --cov-report term --cov-report html --cov-report xml --junitxml junit.xml"
+filterwarnings = "ignore"
+junit_family = "xunit2"
+
+[tool.coverage.run]
+omit = [".venv/*"]
+
+[tool.isort]
+profile = "ruff"
+skip = ".venv"
+
+[tool.ruff]
+extend-exclude = []
+
+[tool.ruff.lint]
+extend-ignore = ["E501"]
+select = [
+    "E",
+    "F",
+    "UP",
+    "B",
+    "SIM",
+    "I"
+]

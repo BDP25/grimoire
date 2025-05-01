@@ -1,0 +1,15 @@
+meta {
+  name: Update Avatar
+  type: http
+  seq: 7
+}
+
+post {
+  url: http://127.0.0.1:5000/api/v1/users/me/avatar
+  body: multipartForm
+  auth: none
+}
+
+body:multipart-form {
+  avatar: @file(..\data\avatar.png)
+}

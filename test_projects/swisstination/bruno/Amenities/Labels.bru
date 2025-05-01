@@ -1,0 +1,17 @@
+meta {
+  name: Labels
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://127.0.0.1:5000/api/v1/amenities/labels?sort=asc&search=an&limit=10
+  body: none
+  auth: none
+}
+
+params:query {
+  sort: asc
+  search: an
+  limit: 10
+}

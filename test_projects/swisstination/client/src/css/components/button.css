@@ -1,0 +1,14 @@
+.btn {
+  border: theme("borderWidth.2") solid theme("colors.black");
+  height: theme("spacing.12");
+  padding: theme("spacing.2") theme("spacing.4");
+}
+.btn:hover {
+  box-shadow: var(---neo-box-shadow);
+}
+
+/* Type Variants */
+
+.btn--rounded {
+  border-radius: theme("borderRadius.full");
+}

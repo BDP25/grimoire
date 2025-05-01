@@ -1,0 +1,14 @@
+[flake8]
+exclude = .git,__pycache__,docs/source/conf.py,old,build,dist,venv/,static/,frontend/,.venv/,node_modules
+max-complexity = 10
+ignore =
+    # Call getattr with a constant attribute value
+    B009,
+    # whitespace before ':'
+    E203,
+    # Line too long (82 > 79 characters)
+    E501,
+    # Line break occurred before a binary operator
+    W503,
+    # Function is too complex
+    C901,

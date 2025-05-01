@@ -1,0 +1,48 @@
+meta {
+  name: Create Tour
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://127.0.0.1:5000/api/v1/tours
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "title": "New Tour",
+    "description": "blablabl sdföls df",
+    "duration": 2,
+    "tags": [
+      "a",
+      "b"
+    ],
+    "destinations": [
+      {
+        "amenityId": "734402",
+        "title": "Some Title",
+        "description": "Some Description"
+      }
+    ]
+  }
+}
+
+body:text {
+  {
+    "title": "New Tour",
+    "description": "blablabl sdföls df",
+    "duration": "2a",
+    "tags": [
+      "a",
+      "b"
+    ],
+    "destinations": [
+      {
+        "amenityId": "734402",
+        "description": "Some Description"
+      }
+    ]
+  }
+}

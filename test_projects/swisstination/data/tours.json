@@ -1,0 +1,104 @@
+{
+  "nodes": [
+    {
+      "_id": {
+        "$oid": "67407dc9c2cd9928635bca13"
+      },
+      "title": "Hidden Benches Tour Zug",
+      "description": "The Hidden Benches Tour in Zug takes you on a journey to discover serene, tucked-away spots that offer breathtaking views and peaceful escapes. These hidden benches, often overlooked, are nestled in quiet corners, surrounded by nature or discreetly placed in urban spaces, providing perfect moments of tranquility and reflection. From scenic paths to unexpected viewpoints, this tour invites you to slow down, explore, and experience the city from a fresh perspective, making it ideal for those seeking a blend of adventure and relaxation away from the crowds.",
+      "duration": 150,
+      "likes": 12,
+      "creatorId": {
+        "$oid": "674070e91e80605f59dea1af"
+      },
+      "tags": ["urban", "scenic", "nature", "oneway"],
+      "destination": [
+        {
+          "amenityId": "459960880",
+          "title": "Fountain at Zug Train Station",
+          "description": "The starting point of the tour is the small fountain at Zug train station. Here, you can fill your water bottles one last time."
+        },
+        {
+          "amenityId": "1283079447",
+          "title": "The Fountain at the Lake",
+          "description": "From the train station, you walk briefly through the city directly to the beautiful lake and its fountain."
+        },
+        {
+          "amenityId": "11786407701",
+          "title": "Guggi Park",
+          "description": "Guggi Park is a beautiful park in Zug. Here, you can relax and enjoy nature. There is also a rose garden in the park."
+        },
+        {
+          "amenityId": "8213047808",
+          "title": "Guggi Viewpoint",
+          "description": "From Guggi Park, you have a stunning view of the city of Zug and Lake Zug."
+        },
+        {
+          "amenityId": "7647580529",
+          "title": "Huwiler Tower",
+          "description": "Right next to the Huwiler Tower, there is a smaller park."
+        },
+        {
+          "amenityId": "2068468295",
+          "title": "Seeliken",
+          "description": "You can end the tour at Seeliken with a refreshing drink and a dip in Lake Zug."
+        }
+      ]
+    },
+    {
+      "_id": {
+        "$oid": "675071ee0d25191304822d87"
+      },
+      "title": "My favorite Uettliberg Spots",
+      "description": "The Uetliberg is Zurich's local mountain and offers a fantastic view of the city and the lake. The tour takes you to my favorite spots on the Uetliberg. The tour is perfect for a afternoon trip from Zurich and is also suitable for families with children.",
+      "duration": 210,
+      "likes": 5,
+      "creatorId": {
+        "$oid": "6740706a39147b28e5d92a9a"
+      },
+      "tags": ["urban", "scenic", "nature", "oneway"],
+      "destination": [
+        {
+          "amenityId": "9958954414",
+          "title": "Uetliberg Train Station",
+          "description": "The starting point of the tour is the Uetliberg train station. From here, you can already enjoy a beautiful view of the city of Zurich."
+        },
+        {
+          "amenityId": "8927435826",
+          "title": "TV Tower",
+          "description": "Next stop is the TV tower which is visible from all over Zurich."
+        },
+        {
+          "amenityId": "9958954407",
+          "title": "Main Viewpoint",
+          "description": "From the main viewpoint, you have a fantastic view of the city of Zurich and the lake."
+        },
+        {
+          "amenityId": "8068300655",
+          "title": "Going Down",
+          "description": "After the beautiful view, you can walk pass the train station and start descending."
+        },
+        {
+          "amenityId": "8926316682",
+          "title": "Playground Hohenstein",
+          "description": "After a while you will reach the playground Hohenstein. Here, you can take a break and let your kids play."
+        },
+        {
+          "amenityId": "1838653756",
+          "title": "Descending to Triemli",
+          "description": "After the playground you can descend further to Triemli, this takes around 30 minutes. From there you can take the train back."
+        },
+        {
+          "amenityId": "2209157880",
+          "title": "Walking to Wiedikon Train Station",
+          "description": "If you are still fit, you can walk back to Wiedikon train station. This takes around 30 min."
+        },
+        {
+          "amenityId": "8684643185",
+          "title": "Walking to Zurich Main Station",
+          "description": "If you are still fit, you can walk back to Zurich Main Station. This takes around 20 min."
+        }
+      ]
+    }
+  ]
+}
