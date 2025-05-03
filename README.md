@@ -107,20 +107,6 @@ uv run poe types   # type check code
 uv run poe test    # run tests
 ```
 
-#### Working with Test Projects
-
-To test a new project, you can simply add the project as submodule to the `test_projects` folder:
-
-```shell
-git submodule add <project-url> test_projects/<project-name>
-```
-
-Updating the submodule can be done with:
-
-```shell
-git submodule update --remote
-```
-
 ## License
 
 Distributed under the MIT License. See [LICENSE.md](LICENSE.md) for more information.
