@@ -174,13 +174,15 @@ def evaluate_batch(llm: Any, batch: list[dict]) -> list[str]:
         )
     return results
 
+
 def sanitize_text(text: str) -> str:
     """
     Replaces newlines and excess whitespace in a string to ensure single-line Markdown compatibility.
     :param text: the input string to sanitize
     :returns: a single-line version of the input string
     """
-    return re.sub(r"\s+", " ", text.strip()) 
+    return re.sub(r"\s+", " ", text.strip())
+
 
 def evaluate_scores() -> None:
     """
@@ -221,7 +223,9 @@ def evaluate_scores() -> None:
             except ValueError:
                 pass
 
-            sanitized_entry = f"| {parts[1]} | {parts[2]} | {parts[3]} | {parts[4]} | {parts[5]} |"
+            sanitized_entry = (
+                f"| {parts[1]} | {parts[2]} | {parts[3]} | {parts[4]} | {parts[5]} |"
+            )
             results.append(sanitized_entry)
 
         if i + BATCH_SIZE < len(data):
@@ -250,7 +254,6 @@ def evaluate_scores() -> None:
         f.write("\n".join(scores))
 
     print(f"Scoring completed!\nScores saved: {SCORES_FILE}")
-
 
 
 if __name__ == "__main__":
