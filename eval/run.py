@@ -17,7 +17,6 @@ runner = CliRunner()
 # Define paths for evaluation assets
 EVAL_FOLDER = Path(__file__).parent
 QUESTIONS_FILE = EVAL_FOLDER / "questions.json"
-RESULTS_TABLE_FILE = EVAL_FOLDER / "results.md"
 FULL_ANSWERS_FILE = EVAL_FOLDER / "full_answers.md"
 JSON_ANSWERS_FILE = EVAL_FOLDER / "answers.json"  # For evaluation
 
@@ -76,10 +75,9 @@ def run_evaluation() -> None:
     Run the evaluation process for a set of questions.
 
     It executes Grimoire CLI queries with and without RAG, collects and saves results
-    in Markdown format, and prints summary information.
+    in Markdown and JSON format.
     """
     questions = load_questions()
-    table_results = []
     full_answers_md = ["# Evaluation\n"]
     json_answers = []
 
@@ -97,14 +95,6 @@ def run_evaluation() -> None:
             f"### LLM + RAG:\n{answer_with_rag}\n\n---\n"
         )
 
-        # Truncate answers for summary table
-        short_answer_without_rag = truncate_answer(answer_without_rag)
-        short_answer_with_rag = truncate_answer(answer_with_rag)
-
-        table_results.append(
-            f"| {q['id']} | {question_text} | {short_answer_without_rag} | {short_answer_with_rag} |"
-        )
-
         # Neutral format for JSON (no bias labels)
         json_answers.append(
             {
@@ -114,12 +104,6 @@ def run_evaluation() -> None:
                 "answer_b": answer_with_rag,
             }
         )
-
-    # Save Markdown summary table
-    with open(RESULTS_TABLE_FILE, "w", encoding="utf-8") as file:
-        file.write("| ID | Question | Answer (LLM Only) | Answer (LLM + RAG) |\n")
-        file.write("|----|----------|------------------|-------------------|\n")
-        file.write("\n".join(table_results))
 
     # Save full answers separately
     with open(FULL_ANSWERS_FILE, "w", encoding="utf-8") as file:
@@ -131,7 +115,6 @@ def run_evaluation() -> None:
 
     print(
         f"Evaluation completed!\n"
-        f"Table saved: {RESULTS_TABLE_FILE}\n"
         f"Full answers saved: {FULL_ANSWERS_FILE}\n"
         f"JSON saved: {JSON_ANSWERS_FILE}"
     )
