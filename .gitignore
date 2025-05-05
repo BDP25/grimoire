@@ -1,6 +1,7 @@
 .idea/
 .vscode/
 
+.DS_Store
 __pycache__
 .cache
 dist/
@@ -14,4 +15,6 @@ coverage.xml
 junit.xml
 pylint_results.xml
 repomix-output.xml
-**/.DS_Store
+
+test_projects/*
+!test_projects/init.sh
