@@ -7,6 +7,7 @@ from grimoire.configuration import (
     DBConfiguration,
     LLMConfiguration,
     ProjectConfiguration,
+    Source,
 )
 from grimoire.helpers.typer import green_text
 
@@ -71,12 +72,20 @@ def init(
         raise typer.Exit(code=0)
 
     config: ProjectConfiguration = get_project_config(path)
+    config.sources = [
+        Source(
+            url="https://github.com/BDP25/grimoire",
+            branch="main",
+            include_md=True,
+            include_code=False,
+        )
+    ]
     config.save_to_yaml(file_path)
 
     success_message = f"""
     {green_text("Grimoire project initialized successfully! 🎉")}
 
-    Run `grimoire update` to update all your projects dependencies.
+    Add your sources to the project by modifying the {green_text("sources")} field in the configuration file.
 
     Configuration: {file_path}
     Note: directly modify the "{CONFIG_FILE_NAME}" configuration to your needs.

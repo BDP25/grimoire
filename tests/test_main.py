@@ -14,7 +14,7 @@ def test_help_flag() -> None:
 
 def test_includes_commands() -> None:
     result = runner.invoke(cli, ["--help"])
-    commands = ["ask", "flush", "init", "sync", "update", "verify", "version"]
+    commands = ["ask", "flush", "init", "sync", "verify", "version"]
     for command in commands:
         assert command in result.stdout
 

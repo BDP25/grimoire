@@ -16,4 +16,10 @@ llm:
   code_chunk_overlap: 128
 include_project: true
 project_src: grimoire
-sources: null
+sources:
+  - url: https://github.com/fastapi/typer
+    include_md: true
+    include_code: false
+  - url: https://github.com/pydantic/pydantic
+    include_md: true
+    include_code: false
