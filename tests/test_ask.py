@@ -9,20 +9,24 @@ runner = CliRunner()
 
 
 @patch.dict(os.environ, {}, clear=True)
-def test_ask_fails_without_llm_api_key():
-    result = runner.invoke(cli, ["ask", "What", "is", "this?"])
+def test_ask_fails_without_llm_api_key(create_grimoire_config):
+    path = create_grimoire_config()
+    result = runner.invoke(cli, ["ask", "What", "is", "this?", "--path", str(path)])
     assert result.exit_code != 0
     assert "LLM_API_KEY environment variable is not set." in result.stdout
 
 
 @patch.dict(os.environ, {"LLM_API_KEY": "fake-key"})
 @patch("grimoire.ask.setup_llm")
-def test_ask_with_skip_rag_uses_only_llm(mock_setup_llm):
+def test_ask_with_skip_rag_uses_only_llm(mock_setup_llm, create_grimoire_config):
+    path = create_grimoire_config()
     mock_llm = MagicMock()
     mock_llm.stream.return_value = [MagicMock(content="LLM response.")]
     mock_setup_llm.return_value = mock_llm
 
-    result = runner.invoke(cli, ["ask", "My dummy question?", "--skip-rag"])
+    result = runner.invoke(
+        cli, ["ask", "My dummy question?", "--skip-rag", "--path", str(path)]
+    )
     assert result.exit_code == 0
     assert "LLM response." in result.stdout
     mock_llm.stream.assert_called_once_with("My dummy question?")
@@ -40,7 +44,9 @@ def test_ask_with_rag_invokes_rag_chain(
     mock_vectorstore_connection,
     mock_load_config,
     mock_setup_llm,
+    create_grimoire_config,
 ):
+    path = create_grimoire_config()
     mock_llm = MagicMock()
     mock_setup_llm.return_value = mock_llm
 
@@ -56,7 +62,7 @@ def test_ask_with_rag_invokes_rag_chain(
     mock_chain.stream.return_value = ["retrieved result"]
     mock_get_chain.return_value = mock_chain
 
-    result = runner.invoke(cli, ["ask", "Some", "question"])
+    result = runner.invoke(cli, ["ask", "Some", "question", "--path", str(path)])
     assert result.exit_code == 0
     assert "retrieved result" in result.stdout
     mock_load_config.assert_called_once()
