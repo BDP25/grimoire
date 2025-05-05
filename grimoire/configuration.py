@@ -85,7 +85,7 @@ class Source(BaseModel):
     """
 
     url: str
-    branch: str = "default"
+    branch: str | None = None
     include_md: bool = True
     include_code: bool = False
 
