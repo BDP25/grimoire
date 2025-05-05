@@ -175,17 +175,28 @@ def evaluate_batch(llm: Any, batch: list[dict]) -> list[str]:
     return results
 
 
+def sanitize_text(text: str) -> str:
+    """
+    Replaces newlines and excess whitespace in a string to ensure single-line Markdown compatibility.
+    :param text: the input string to sanitize
+    :returns: a single-line version of the input string
+    """
+    return re.sub(r"\s+", " ", text.strip())
+
+
 def evaluate_scores() -> None:
     """
     Evaluates all answers using the LLM and writes the results to a markdown file.
     :returns: None
     """
     data = load_answers_from_json()
-    scores = [
-        "# Evaluation Scores\n",
-        "| ID | Question | Score A | Score B | Comment |",
-        "|----|----------|---------|---------|---------|",
-    ]
+
+    total_score_a = 0
+    total_score_b = 0
+    count_a = 0
+    count_b = 0
+
+    results = []
 
     llm = setup_llm()
 
@@ -194,13 +205,50 @@ def evaluate_scores() -> None:
 
         batch_results = evaluate_batch(llm, batch)
 
-        scores.extend(batch_results)
+        for entry in batch_results:
+            parts = [sanitize_text(part) for part in entry.split("|")]
+
+            # Index: 0=empty, 1=id, 2=question, 3=score_a, 4=score_b, 5=comment, 6=empty
+            try:
+                score_a = int(parts[3])
+                total_score_a += score_a
+                count_a += 1
+            except ValueError:
+                pass
+
+            try:
+                score_b = int(parts[4])
+                total_score_b += score_b
+                count_b += 1
+            except ValueError:
+                pass
+
+            sanitized_entry = (
+                f"| {parts[1]} | {parts[2]} | {parts[3]} | {parts[4]} | {parts[5]} |"
+            )
+            results.append(sanitized_entry)
 
         if i + BATCH_SIZE < len(data):
             print(
                 f"Processed batch {i // BATCH_SIZE + 1}. Waiting {BATCH_DELAY} seconds before next batch."
             )
             time.sleep(BATCH_DELAY)
+
+    # Calculate mean scores
+    mean_a = round(total_score_a / count_a, 2) if count_a else 0.0
+    mean_b = round(total_score_b / count_b, 2) if count_b else 0.0
+
+    scores = [
+        "# Evaluation Scores\n",
+        "",
+        "| System         | Total Score | Mean |",
+        "|----------------|-------------|------|",
+        f"| LLM Only (A)   | {total_score_a}         | {mean_a}  |",
+        f"| LLM + RAG (B)  | {total_score_b}         | {mean_b}  |",
+        "",
+        "| ID | Question | Score A | Score B | Comment |",
+        "|----|----------|---------|---------|---------|",
+    ] + results
 
     with open(SCORES_FILE, "w", encoding="utf-8") as f:
         f.write("\n".join(scores))
