@@ -76,7 +76,6 @@ grim --help
 │ flush     Flush the whole vectorstore                                       │
 │ init      Initialize a new grimoire project                                 │
 │ sync      Sync the grimoire project with existing configuration             │
-│ update    Update the grimoire sources with the latest dependencies          │
 │ verify    Verify the configuration of the project                           │
 ╰─────────────────────────────────────────────────────────────────────────────╯
 ```
