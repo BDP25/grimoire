@@ -85,6 +85,7 @@ class Source(BaseModel):
     """
 
     url: str
+    branch: str = "default"
     include_md: bool = True
     include_code: bool = False
 
@@ -124,5 +125,8 @@ class ProjectConfiguration(BaseModel):
         """
         with open(file_path, "w", encoding="utf-8") as f:
             yaml.dump(
-                data=self.model_dump(), stream=f, Dumper=YamlDumper, sort_keys=False
+                data=self.model_dump(),
+                stream=f,
+                Dumper=YamlDumper,
+                sort_keys=False,
             )

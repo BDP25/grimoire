@@ -22,10 +22,8 @@ ask_cli = typer.Typer()
 def ask(
     question: list[str],
     skip_rag: bool = typer.Option(False, "--skip-rag", help="Skip the RAG process"),
-    path: Path = typer.Option(  # noqa: B008
-        get_recursive_config(),  # noqa: B008
-        "--path",
-        help="Path to the grimoire project",
+    path: Path | None = typer.Option(  # noqa: B008
+        None, "--path", help="Path to the grimoire project"
     ),
 ) -> None:
     """
@@ -35,6 +33,9 @@ def ask(
     :param skip_rag: Flag to skip the RAG process and use only the LLM.
     :param path: Path to the grimoire project.
     """
+    if path is None:
+        path = get_recursive_config()
+
     if not os.getenv("LLM_API_KEY"):
         typer.echo("LLM_API_KEY environment variable is not set.")
         raise typer.Abort()

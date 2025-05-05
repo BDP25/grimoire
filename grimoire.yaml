@@ -16,22 +16,4 @@ llm:
   code_chunk_overlap: 128
 include_project: true
 project_src: grimoire
-sources:
-  - url: https://github.com/pallets/flask
-    include_md: true
-    include_code: false
-  - url: https://github.com/corydolphin/flask-cors
-    include_md: true
-    include_code: false
-  - url: https://github.com/pallets-eco/flask-sqlalchemy
-    include_md: true
-    include_code: false
-  - url: https://github.com/miguelgrinberg/Flask-Migrate
-    include_md: true
-    include_code: false
-  - url: https://github.com/psf/requests
-    include_md: true
-    include_code: false
-  - url: https://github.com/benoitc/gunicorn
-    include_md: true
-    include_code: false
+sources: null

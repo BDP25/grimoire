@@ -7,20 +7,10 @@ from grimoire.configuration import (
     DBConfiguration,
     LLMConfiguration,
     ProjectConfiguration,
-    Source,
 )
 from grimoire.helpers.typer import green_text
 
 init_cli = typer.Typer()
-
-DUMMY_SOURCES = [
-    Source(url="https://github.com/pallets/flask"),
-    Source(url="https://github.com/corydolphin/flask-cors"),
-    Source(url="https://github.com/pallets-eco/flask-sqlalchemy"),
-    Source(url="https://github.com/miguelgrinberg/Flask-Migrate"),
-    Source(url="https://github.com/psf/requests"),
-    Source(url="https://github.com/benoitc/gunicorn"),
-]
 
 
 def get_project_config(path: Path) -> ProjectConfiguration:
@@ -54,7 +44,6 @@ def get_project_config(path: Path) -> ProjectConfiguration:
         project_src=project_src,
         llm=ingestion_config,
         db=db_config,
-        sources=DUMMY_SOURCES,  # TODO: add sources from dep files
     )
 
 
@@ -86,6 +75,8 @@ def init(
 
     success_message = f"""
     {green_text("Grimoire project initialized successfully! 🎉")}
+
+    Run `grimoire update` to update all your projects dependencies.
 
     Configuration: {file_path}
     Note: directly modify the "{CONFIG_FILE_NAME}" configuration to your needs.

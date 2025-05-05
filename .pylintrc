@@ -11,6 +11,7 @@ ignore-paths=
     ^.*/tests/.*$,
     sandbox/.*$,
     eval/.*$,
+    tests/.*$,
 
 load-plugins=
     pylint.extensions.check_elif,

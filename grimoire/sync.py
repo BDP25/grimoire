@@ -26,9 +26,8 @@ sync_cli = typer.Typer()
 
 @sync_cli.command("sync", help="Sync the grimoire project with existing configuration")
 def sync(
-    path: Path = typer.Argument(  # noqa: B008
-        get_recursive_config(),  # noqa: B008
-        help="Path to the grimoire project",
+    path: Path | None = typer.Option(  # noqa: B008
+        None, "--path", help="Path to the grimoire project"
     ),
 ) -> None:
     """
@@ -36,6 +35,9 @@ def sync(
 
     :param path: Path to the grimoire project.
     """
+    if path is None:
+        path = get_recursive_config()
+
     if not typer.confirm(
         f"Are you sure you want to sync the grimoire project at {path}?",
         default=False,

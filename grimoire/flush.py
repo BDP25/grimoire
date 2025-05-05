@@ -15,9 +15,8 @@ flush_cli = typer.Typer()
 
 @flush_cli.command("flush", help="Flush the whole vectorstore")
 def flush(
-    path: Path = typer.Argument(  # noqa: B008
-        get_recursive_config(),  # noqa: B008
-        help="Path to the grimoire project",
+    path: Path | None = typer.Option(  # noqa: B008
+        None, "--path", help="Path to the grimoire project"
     ),
 ) -> None:
     """
@@ -25,6 +24,9 @@ def flush(
 
     :param path: Path to the grimoire project.
     """
+    if path is None:
+        path = get_recursive_config()
+
     config = ProjectConfiguration.load_from_yaml(path / CONFIG_FILE_NAME)
 
     if not typer.confirm("Do you really want to flush the vectorstore?", default=False):
