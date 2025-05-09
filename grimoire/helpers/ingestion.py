@@ -73,7 +73,7 @@ def code_ingestion(
     """
     data = GenericLoader.from_filesystem(
         path=path,
-        suffixes=[".py", ".js", ".ts", ".html", ".css"],
+        suffixes=[".py", ".js", ".ts", ".tsx", ".html"],
         parser=LanguageParser(),
         **kwargs,
     ).load()
