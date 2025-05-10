@@ -4,7 +4,7 @@ from langchain.chat_models import init_chat_model
 from langchain_core.language_models.chat_models import BaseChatModel
 
 
-def setup_llm() -> BaseChatModel:
+def setup_llm(max_tokens: int = 512) -> BaseChatModel:
     """
     Set up the LLM (Language Model) for the application.
 
@@ -14,6 +14,6 @@ def setup_llm() -> BaseChatModel:
         "google_genai:gemini-2.0-flash",
         api_key=os.getenv("LLM_API_KEY"),
         configurable_fields=None,
-        max_tokens=512,
+        max_tokens=max_tokens,
         temperature=0,
     )
