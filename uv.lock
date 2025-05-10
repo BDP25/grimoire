@@ -510,6 +510,7 @@ dev = [
     { name = "pytest-cov" },
     { name = "pytest-deadfixtures" },
     { name = "ruff" },
+    { name = "tqdm" },
     { name = "types-pyyaml" },
 ]
 
@@ -548,6 +549,7 @@ dev = [
     { name = "pytest-cov", specifier = ">=6.0.0" },
     { name = "pytest-deadfixtures", specifier = ">=2.2.1" },
     { name = "ruff", specifier = ">=0.9.8" },
+    { name = "tqdm", specifier = ">=4.67.1" },
     { name = "types-pyyaml", specifier = ">=6.0.12.20241230" },
 ]
 
