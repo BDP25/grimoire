@@ -4,16 +4,11 @@ questions = [
     # General Questions
     EvalQuestion(
         id=1,
-        question="What is the swisstination project about and what does Swisstination solve?",
+        question="What is the Swisstination project about? Explain in a few sentences.",
     ),
     EvalQuestion(id=2, question="What databse is used in the swisstination project?"),
-    EvalQuestion(
-        id=3,
-        question="From which source is the data fetched for the swisstination project?",
-    ),
-    EvalQuestion(
-        id=4, question="What dependencies are used in the swisstination project?"
-    ),
+    EvalQuestion(id=3, question="From which public source is the geo data loaded?"),
+    EvalQuestion(id=4, question="What dependencies are used in the project?"),
     EvalQuestion(id=5, question="What are Amenities?"),
     # App Technical Questions
     EvalQuestion(id=6, question="How to get a new mongodb collection client?"),
@@ -21,13 +16,8 @@ questions = [
     EvalQuestion(id=8, question="How to setup a new flask router for blog endpoints?"),
     EvalQuestion(id=9, question="Which global error handlers are used?"),
     EvalQuestion(id=10, question="For what is the response_wrapper() function used?"),
-    EvalQuestion(
-        id=11, question="What exactly does the app.register_blueprint() function do?"
-    ),
-    EvalQuestion(
-        id=12,
-        question="Which python project manager is used and how to add new dependencies?",
-    ),
+    EvalQuestion(id=11, question="What does the app.register_blueprint() function do?"),
+    EvalQuestion(id=12, question="How to add new python dependencies?"),
     # Client Technical Questions
     EvalQuestion(id=13, question="What client framework is used in the project?"),
     EvalQuestion(id=14, question="How to create a new breadcrumb component?"),

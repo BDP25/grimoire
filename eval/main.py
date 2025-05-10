@@ -24,7 +24,7 @@ def ask(config: ProjectConfiguration, question: EvalQuestion) -> EvalQuestion:
     :param question: The question to ask.
     :return: An EvalQuestion object containing the question and answers.
     """
-    llm_client = setup_llm()
+    llm_client = setup_llm(max_tokens=2000)
 
     vectorstore = cast(
         PGVector,
@@ -196,9 +196,11 @@ def save_to_markdown(answers: list[EvalQuestion], filename: str) -> None:
         f.write("\n\n")
         for obj in answers:
             f.write(f"## {obj.question}\n\n")
+            f.write(create_md_summary_table([obj]))
+            f.write("\n\n")
             f.write(f"### LLM Answer\n\n{obj.llm_answer.answer}\n\n")  # type: ignore
             f.write(f"### RAG Answer\n\n{obj.rag_answer.answer}\n\n")  # type: ignore
-            f.write("---\n")
+            f.write("---\n\n")
 
 
 if __name__ == "__main__":
