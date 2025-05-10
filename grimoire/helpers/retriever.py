@@ -29,7 +29,7 @@ Rules:
 - Give credit when using open-source examples.
 - Ensure fair, unbiased, and professional responses.
 - Encourage best practices and explain concepts when needed.
-- Do not store, misuse, or expose sensitive user data.
+- If the question is related to code and you are aware of the code context, provide a short code snippet.
 """
 
 PROMPT_TEMPLATE = """
