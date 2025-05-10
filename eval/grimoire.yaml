@@ -1,4 +1,4 @@
-name: grimoire
+name: swisstination
 db:
   host: localhost
   port: 5432
@@ -6,7 +6,7 @@ db:
   user: pgvector
   password: pgvector
 llm:
-  collection: sandbox
+  collection: swisstination
   k_results: 5
   score_threshold: 0.8
   lambda_mult: 0.5
@@ -15,38 +15,41 @@ llm:
   code_chunk_size: 512
   code_chunk_overlap: 128
 include_project: false
-project_src: sandbox
+project_src: swisstination
 sources:
+  - url: https://github.com/JohnTrunix/swisstination
+    branch: main
+    include_md: true
+    include_code: true
   - url: https://github.com/pallets/flask
+    branch: 3.0.3
+    include_md: true
+    include_code: false
+  - url: https://github.com/mongodb/mongo-python-driver
+    branch: 4.9.1
+    include_md: true
+    include_code: false
+  - url: https://github.com/pydantic/pydantic
+    branch: v2.9.2
+    include_md: true
+    include_code: false
+  - url: https://github.com/maxcountryman/flask-bcrypt
+    branch: 1.0.1
     include_md: true
     include_code: false
   - url: https://github.com/corydolphin/flask-cors
+    branch: 5.0.0
     include_md: true
     include_code: false
-  - url: https://github.com/pallets-eco/flask-sqlalchemy
+  - url: https://github.com/chartjs/Chart.js
+    branch: v4.4.7
     include_md: true
     include_code: false
-  - url: https://github.com/miguelgrinberg/Flask-Migrate
+  - url: https://github.com/Leaflet/Leaflet
+    branch: v1.9.4
     include_md: true
     include_code: false
-  - url: https://github.com/psf/requests
+  - url: https://github.com/xoidlabs/xoid
+    branch: main
     include_md: true
     include_code: false
-  - url: https://github.com/benoitc/gunicorn
-    include_md: true
-    include_code: false  
-  - url: https://github.com/maxcountryman/flask-login
-    include_md: true
-    include_code: false  
-  - url: https://github.com/Flask-Middleware/flask-security
-    include_md: true
-    include_code: false 
-  - url: https://github.com/jarus/flask-testing
-    include_md: true
-    include_code: false  
-  - url: https://github.com/flask-restful/flask-restful
-    include_md: true
-    include_code: false     
-  - url: https://github.com/maxcountryman/flask-bcrypt
-    include_md: true
-    include_code: false     
