@@ -45,17 +45,19 @@ def get_precision_eval_prompt(question: str, answer: str) -> str:
 
     :param question: The question asked.
     :param answer: The answer to evaluate.
-    :return: A formatted string for the evaluation prompt.
+    :return: A formatted string for the precision evaluation prompt.
+             Precision is defined as how exactly and concisely the answer addresses the question,
+             avoiding unnecessary or vague information.
     """
     return (
-        "Evaluate the precision of the two answers below. Score from 0 to 10 based on how precise "
+        "Evaluate the precision of the two answers below. Score from 0 (low) to 10 (high) based on how precise "
         "the answers are. Long-winded or overly verbose answers should be penalized. "
         "Assume that the answers were given for a specific context which you are not aware of. "
-        "Prefer answers that are short but contain all key information. "
+        "Prefer answers that are short, clear, and strictly on-topic. "
         "Please provide only a numeric score from 0 (low) to 10 (high) with no explanation text.\n\n"
         f"Question: {question}\n\n"
         f"Answer: {answer}\n\n"
-        "Score:"
+        "Score (0–10):"
     )
 
 
@@ -65,17 +67,19 @@ def get_relevance_eval_prompt(question: str, answer: str) -> str:
 
     :param question: The question asked.
     :param answer: The answer to evaluate.
-    :return: A formatted string for the evaluation prompt.
+    :return: A formatted string for the relevance evaluation prompt.
+             Relevance is defined as how well the answer stays on topic and addresses the specific content of the question.
     """
     return (
-        "Evaluate the relevance of the two answers below. Score from 0 to 10 based on how relevant "
-        "the answers are. Long-winded or overly verbose answers should be penalized. "
+        "Evaluate the relevance of the two answers below. "
+        "Score from 0 (low) to 10 (high) based on how well the answer stays on topic and responds to what was asked. "
+        "Avoid rewarding general or unrelated statements. Clear and focused answers should be preferred. "
         "Assume that the answers were given for a specific context which you are not aware of. "
         "Prefer answers that are short but contain all key information. "
         "Please provide only a numeric score from 0 (low) to 10 (high) with no explanation text.\n\n"
         f"Question: {question}\n\n"
         f"Answer: {answer}\n\n"
-        "Score:"
+        "Score (0–10):"
     )
 
 
@@ -85,17 +89,19 @@ def get_completeness_eval_prompt(question: str, answer: str) -> str:
 
     :param question: The question asked.
     :param answer: The answer to evaluate.
-    :return: A formatted string for the evaluation prompt.
+    :return: A formatted string for the completeness evaluation prompt.
+             Completeness is defined as how fully the answer covers all necessary and relevant aspects of the question.
     """
     return (
-        "Evaluate the completeness of the two answers below. Score from 0 to 10 based on how "
-        "complete the answers are. Long-winded or overly verbose answers should be penalized. "
+        "Evaluate the completeness of the two answers below. "
+        "Assign a score from 0 (low) to 10 (high) based on how fully the answer covers all relevant parts of the question. "
+        "Concise but comprehensive answers should score higher. Do not penalize for brevity if the key points are addressed. "
         "Assume that the answers were given for a specific context which you are not aware of. "
         "Prefer answers that are short but contain all key information. "
         "Please provide only a numeric score from 0 (low) to 10 (high) with no explanation text.\n\n"
         f"Question: {question}\n\n"
         f"Answer: {answer}\n\n"
-        "Score:"
+        "Score (0–10):"
     )
 
 
