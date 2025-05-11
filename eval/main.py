@@ -41,13 +41,13 @@ def ask(config: ProjectConfiguration, question: EvalQuestion) -> EvalQuestion:
 
 def get_precision_eval_prompt(question: str, answer: str) -> str:
     """
-    Prompt for evaluating the precision of the answers.
+    Prompt for evaluating the precision of the answers. Precision is defined as 
+    how exactly and concisely the answer addresses the question, avoiding unnecessary 
+    or vague information.
 
     :param question: The question asked.
     :param answer: The answer to evaluate.
     :return: A formatted string for the precision evaluation prompt.
-             Precision is defined as how exactly and concisely the answer addresses the question,
-             avoiding unnecessary or vague information.
     """
     return (
         "Evaluate the precision of the two answers below. Score from 0 (low) to 10 (high) based on how precise "
@@ -57,18 +57,18 @@ def get_precision_eval_prompt(question: str, answer: str) -> str:
         "Please provide only a numeric score from 0 (low) to 10 (high) with no explanation text.\n\n"
         f"Question: {question}\n\n"
         f"Answer: {answer}\n\n"
-        "Score (0–10):"
+        "Score (0-10):"
     )
 
 
 def get_relevance_eval_prompt(question: str, answer: str) -> str:
     """
-    Prompt for evaluating the relevance of the answers.
+    Prompt for evaluating the relevance of the answers. Relevance is defined as how 
+    well the answer stays on topic and addresses the specific content of the question.
 
     :param question: The question asked.
     :param answer: The answer to evaluate.
     :return: A formatted string for the relevance evaluation prompt.
-             Relevance is defined as how well the answer stays on topic and addresses the specific content of the question.
     """
     return (
         "Evaluate the relevance of the two answers below. "
@@ -79,18 +79,19 @@ def get_relevance_eval_prompt(question: str, answer: str) -> str:
         "Please provide only a numeric score from 0 (low) to 10 (high) with no explanation text.\n\n"
         f"Question: {question}\n\n"
         f"Answer: {answer}\n\n"
-        "Score (0–10):"
+        "Score (0-10):"
     )
 
 
 def get_completeness_eval_prompt(question: str, answer: str) -> str:
     """
-    Prompt for evaluating the completeness of the answers.
+    Prompt for evaluating the completeness of the answers. Completeness is defined 
+    as how fully the answer covers all necessary and relevant aspects of the question.
+
 
     :param question: The question asked.
     :param answer: The answer to evaluate.
     :return: A formatted string for the completeness evaluation prompt.
-             Completeness is defined as how fully the answer covers all necessary and relevant aspects of the question.
     """
     return (
         "Evaluate the completeness of the two answers below. "
@@ -101,7 +102,7 @@ def get_completeness_eval_prompt(question: str, answer: str) -> str:
         "Please provide only a numeric score from 0 (low) to 10 (high) with no explanation text.\n\n"
         f"Question: {question}\n\n"
         f"Answer: {answer}\n\n"
-        "Score (0–10):"
+        "Score (0-10):"
     )
 
 
