@@ -50,14 +50,15 @@ def get_precision_eval_prompt(question: str, answer: str) -> str:
     :return: A formatted string for the precision evaluation prompt.
     """
     return (
-        "Evaluate the precision of the two answers below. Score from 0 (low) to 10 (high) based on how precise "
-        "the answers are. Long-winded or overly verbose answers should be penalized. "
-        "Assume that the answers were given for a specific context which you are not aware of. "
-        "Prefer answers that are short, clear, and strictly on-topic. "
-        "Please provide only a numeric score from 0 (low) to 10 (high) with no explanation text.\n\n"
-        f"Question: {question}\n\n"
-        f"Answer: {answer}\n\n"
-        "Score (0-10):"
+        "Evaluate the **precision** of the following answer from 0 (low) to 10 (high):\n\n"
+        "- High precision = short, fact-based, directly relevant to the question.\n"
+        "- Prefer answers that are clear, specific, and avoid repetition or padding.\n"
+        "- Penalize vague wording, excessive background info, or off-topic elaboration.\n"
+        "- Avoid rewarding long, explanatory or overly detailed responses.\n"
+        "- Provide **only a numeric score (0–10)**. Do not add commentary.\n\n"
+        f"**Question:** {question}\n\n"
+        f"**Answer:** {answer}\n\n"
+        "Score (0–10):"
     )
 
 
@@ -71,15 +72,15 @@ def get_relevance_eval_prompt(question: str, answer: str) -> str:
     :return: A formatted string for the relevance evaluation prompt.
     """
     return (
-        "Evaluate the relevance of the two answers below. "
-        "Score from 0 (low) to 10 (high) based on how well the answer stays on topic and responds to what was asked. "
-        "Avoid rewarding general or unrelated statements. Clear and focused answers should be preferred. "
-        "Assume that the answers were given for a specific context which you are not aware of. "
-        "Prefer answers that are short but contain all key information. "
-        "Please provide only a numeric score from 0 (low) to 10 (high) with no explanation text.\n\n"
-        f"Question: {question}\n\n"
-        f"Answer: {answer}\n\n"
-        "Score (0-10):"
+        "Evaluate the **relevance** of the following answer from 0 (low) to 10 (high):\n\n"
+        "- High relevance = the answer addresses the question directly and specifically.\n"
+        "- Reward answers that clearly use project-specific terms or known context.\n"
+        "- Penalize general lists, background info, or 'I don't know'-style hedging.\n"
+        "- Focus on how well the answer stays on-topic and avoids off-track content.\n"
+        "- Provide **only a numeric score (0–10)**. No explanation.\n\n"
+        f"**Question:** {question}\n\n"
+        f"**Answer:** {answer}\n\n"
+        "Score (0–10):"
     )
 
 
@@ -94,15 +95,15 @@ def get_completeness_eval_prompt(question: str, answer: str) -> str:
     :return: A formatted string for the completeness evaluation prompt.
     """
     return (
-        "Evaluate the completeness of the two answers below. "
-        "Assign a score from 0 (low) to 10 (high) based on how fully the answer covers all relevant parts of the question. "
-        "Concise but comprehensive answers should score higher. Do not penalize for brevity if the key points are addressed. "
-        "Assume that the answers were given for a specific context which you are not aware of. "
-        "Prefer answers that are short but contain all key information. "
-        "Please provide only a numeric score from 0 (low) to 10 (high) with no explanation text.\n\n"
-        f"Question: {question}\n\n"
-        f"Answer: {answer}\n\n"
-        "Score (0-10):"
+        "Evaluate the **completeness** of the following answer from 0 (low) to 10 (high):\n\n"
+        "- High completeness = the answer contains all **key facts** needed to fully answer the question.\n"
+        "- Reward concise answers that still deliver all required information.\n"
+        "- Penalize irrelevant side notes, excessive verbosity, or repeated info.\n"
+        "- Avoid giving higher scores to overly long, tutorial-style answers.\n"
+        "- Provide **only a numeric score (0–10)**. Do not explain the score.\n\n"
+        f"**Question:** {question}\n\n"
+        f"**Answer:** {answer}\n\n"
+        "Score (0–10):"
     )
 
 
