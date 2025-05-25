@@ -20,7 +20,7 @@ You install it. You tell it which repositories to index. It reads your docs and 
 You ask: grim ask "Where is the authentication logic handled?"
 <br>And *grimoire* replies based on your own code and your own docs.🎯<br>
 
-The magic behind it? *grimoire* splits your code into meaningful chunks, embeds it using a multilingual transformer model, stores it in a high performance vector database (pgvector), and retrieves the most relevant pieces when you ask something.
+The magic behind it? *grimoire* uses a Retrieval Augmented Generation (RAG) setup. It splits your code into meaningful chunks, embeds them using a multilingual transformer model, and stores them in a high performance vector database. When you ask a question, it retrieves the most relevant pieces and feeds them into an LLM to generate a context aware response.
 It’s like semantic grep, with memory.
 
 ## How it works behind the scenes 
@@ -39,7 +39,7 @@ It runs fully locally or on infrastructure you control. That means no source cod
 Modern dev environments are chaos. Multiple services. Internal APIs calling external APIs. Ever changing configurations. And a constant stream of new engineers joining teams. *grimoire* helps you make sense of it all. It’s not just another AI chatbot. It’s a developer native context engine. It’s a memory layer that lives alongside your codebase and evolves with it. And it’s not trying to replace anyone. *grimoire* simply helps you ask better questions and get grounded answers, instantly.
 Less guessing. More building. 🚀
 
-## What’s coming next?
+## What’s coming next
 
 *grimoire* is still in an early stage, a working beta that already delivers value but continues to evolve. Current development focuses on integrating *grimoire* more seamlessly into developer workflows. Planned features include editor support for environments like VS Code, a flexible plugin system for custom chunking or embedding models and shared vector store infrastructure for teams and CI/CD pipelines. Looking ahead, the goal is to move from a reactive tool to a proactive assistant that understands code changes and developer intent all while staying privacy friendly and local first.
 
