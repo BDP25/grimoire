@@ -1,65 +1,71 @@
-# The End of Dev Confusion: How *grimoire* Becomes Your Smartest Teammate
+# Revolutionizing Software Onboarding with grimoire
 
-<p align="center">
-  <img src="images/logo.svg" alt="Grimoire Logo" width="200"/>
-</p>
+In the dynamic landscape of software development, one of the biggest challenges developers face is onboarding onto unfamiliar projects. With complex codebases, scattered documentation, and unclear dependencies, the process can easily become daunting and time consuming. Fortunately, a novel solution has emerged that promises to streamline and enhance this experience: **_grimoire_, an AI driven assistant designed to bridge the context gap traditionally left by generic tools.**
 
-Ever joined a new project and stared at unfamiliar code, trying to figure out what the previous developer was thinking?
-You’re not alone. Whether it’s a legacy app, a rapidly evolving microservice, or a stack held together by duct tape and shell scripts the problem is always the same: it’s not the code itself that’s hard, it’s the context that’s missing.
-Most of us spend hours reverse engineering codebases we didn’t write. We search endlessly through outdated docs, jump between functions, guess dependencies, and ping colleagues who maybe remember what a function from two years ago was supposed to do.
-And modern tools? They help sometimes. GPT based chats can answer general questions. grep can find you words. But these tools don’t know your architecture. They can’t read your config. They have no clue about your folder structure or the weird edge case buried in your utils.py.
+## The Challenge of Onboarding
 
-So we built *grimoire*.🪄
+When developers join a new team or contribute to open source projects, they often encounter vast, intricate codebases. These projects can span thousands of files, involve numerous external dependencies, and suffer from inconsistent or outdated documentation. Traditional resources, such as internal wikis or forums, fail to offer the deep contextual understanding necessary for efficient onboarding. Moreover, while large language models (LLMs) like ChatGPT provide general programming knowledge, they typically lack specific project context, limiting their usefulness.
 
-## An assistant that knows your project
+## Introducing grimoire: A Client-side AI Wizard 🔮
 
-*grimoire* is a local first AI assistant that understands your actual codebase not the internet’s, not Stack Overflow’s, but yours.
-You install it. You tell it which repositories to index. It reads your docs and your code, builds a searchable semantic map of everything and then it just sits in your terminal, waiting for your next question. No setup nightmares. No cloud dependency. Just you, your terminal, and a tool that gets it.
+To address these challenges, we present _grimoire_, a client-side AI assistant that utilizes **Retrieval Augmented Generation (RAG)** to offer deep contextual understanding of a project's code, documentation, and dependencies. _grimoire_ analyzes and indexes entire codebases, enabling developers to query their projects in natural language and receive context aware answers.
 
-<br>Want to know where the auth_token gets validated? <br>
-You ask: grim ask "Where is the authentication logic handled?"
-<br>And *grimoire* replies based on your own code and your own docs.🎯<br>
+### How Grimoire Works
 
-The magic behind it? *grimoire* uses a Retrieval Augmented Generation (RAG) setup. It splits your code into meaningful chunks, embeds them using a multilingual transformer model, and stores them in a high performance vector database. When you ask a question, it retrieves the most relevant pieces and feeds them into an LLM to generate a context aware response.
-It’s like semantic grep, with memory.
+![grimoire architecture diagram](images/blog.png)
 
-## How it works behind the scenes 
+_grimoire_ uses a comprehensive pipeline that includes automated source code parsing, structured documentation retrieval, and LLM integration. It parses the entire codebase, constructs semantic embeddings, and dynamically retrieves relevant content, thereby enhancing LLMs with project specific knowledge. **This approach allows developers to access precise, context rich insights that improve onboarding efficiency and understanding.**
 
-<p align="center"> <img src="images/blog.png" alt="grimoire architecture diagram" width="500"/> </p>
+### The Benefits
 
-From repository to response, *grimoire* creates a local, project specific knowledge base. Code and docs are parsed and chunked with LangChain and Tree-sitter, embedded with transformer models like BGE-M3, stored in pgvector, and retrieved on demand. The result is a smart assistant that doesn’t hallucinate because it knows your repository better than you do.🧙‍♀️
+1. **Contextual Understanding**: By indexing the entire codebase, _grimoire_ provides deep insights into project specific details, such as custom APIs and internal libraries.
+   
+2. **Local Privacy**: Operating entirely locally, _grimoire_ ensures data privacy and compliance with corporate policies, offering secure, offline accessibility.
+   
+3. **Improved Efficiency**: Early evaluations show that _grimoire_ reduces onboarding times and enhances developer comprehension of complex codebases.
 
-## Built for developers
+## System Design and Configuration
 
-*grimoire* was created with one core belief: developers should spend less time reading code and more time understanding it.
-It runs fully locally or on infrastructure you control. That means no source code ever leaves your machine. If you're working in a company with privacy policies or compliance needs, you're safe. It just works. Offline, private, and secure by design. And if you're on a team? Even better. You can share the vector index across machines. No need for everyone to resync the same repository. It’s fast, efficient, and scales with your workflow. Setup is just as smooth. You define your indexing scope in a grimoire.yaml file, choose your chunking rules, run grim sync, and from there it’s just grim ask. Easy.
+_grimoire_ is built with maintainable, modular, and clean code principles. It uses open source solutions and offers flexible configuration possibilities through a YAML file, enabling users to adjust _grimoire_'s behavior to fit their needs. The tool supports multiple usage modes, including **fully local setups** and centrally deployed vector stores for **shared access across teams**.
 
-## So why does it matter?
+## Getting Started with grimoire
 
-Modern dev environments are chaos. Multiple services. Internal APIs calling external APIs. Ever changing configurations. And a constant stream of new engineers joining teams. *grimoire* helps you make sense of it all. It’s not just another AI chatbot. It’s a developer native context engine. It’s a memory layer that lives alongside your codebase and evolves with it. And it’s not trying to replace anyone. *grimoire* simply helps you ask better questions and get grounded answers, instantly.
-Less guessing. More building. 🚀
-
-## What’s coming next
-
-*grimoire* is still in an early stage, a working beta that already delivers value but continues to evolve. Current development focuses on integrating *grimoire* more seamlessly into developer workflows. Planned features include editor support for environments like VS Code, a flexible plugin system for custom chunking or embedding models and shared vector store infrastructure for teams and CI/CD pipelines. Looking ahead, the goal is to move from a reactive tool to a proactive assistant that understands code changes and developer intent all while staying privacy friendly and local first.
-
-In short: it works today, and it’s getting smarter tomorrow. Whether you’re an early adopter or just curious, this is the perfect time to try *grimoire* or contribute to its evolution. 🚀
-
-## Try it yourself 
-
-*grimoire* is open source, minimal to install, and built to get out of your way. You don’t need a server, a dashboard, or an onboarding call. Just code and context.
-
-Here’s how you get started:
+Setting up _grimoire_ is straightforward. After installing the CLI tool from the official [GitHub repository](https://github.com/BDP25/grimoire) navigate into your project directory and run the following command:
 
 ```bash
-pip install grimoire-cli
 grim init
-grim sync
-grim ask "Where is the payment flow configured?"
 ```
 
-That’s it. No complex setup, no cloud dependency. Just one terminal command away from real answers, based on your own repositories and documentation. From confusion to clarity, *grimoire* helps you get up to speed, stay in flow, and finally work with a tool that actually understands your project. Let it save you hours. Let it read the code for you. Let it be the teammate who knows where everything is, even when no one else does.
+After successfully initializing, you should see a `grimoire.yaml` file in your project directory. This file allows you to configure how _grimoire_ indexes your codebase, including chunking rules and embedding models.
 
-<br>GitHub: [BDP25/grimoire](https://github.com/BDP25/grimoire)<br>
-Authors: Céline Felix, John Truninger, Kirishana Kiritharan
-<br>ZHAW School of Engineering, 2025<br>
+Next before you can ask project specific questions, you need to sync your project with _grimoire_:
+
+```bash
+grim sync
+```
+
+Once the sync is complete, you can start asking questions about your project:
+
+```text
+❯ grim ask "What is grimoire?"
+
+grimoire 🔮:
+grimoire is a local first AI assistant that understands your codebase. 
+It helps you onboard faster, develop smarter, and navigate your project 
+with ease by providing deep code understanding, seamless documentation 
+access, and smart dependency mapping.
+```
+
+Simple as magic, isn't it? 🧙🏻‍♂️
+
+## Looking Ahead
+
+The potential of _grimoire_ extends beyond current capabilities. Future plans include integrations with tools like Repomix and Model Context Protocols (MCPs), as well as AI agents that could provide proactive engagement and decision making. Additionally, 3rd party plugin support will enhance customization and allow users to tailor _grimoire_ to their specific requirements. 
+
+Stay updated with the latest developments and contribute to the project on [GitHub](https://github.com/BDP25/grimoire)! ⭐️
+
+## Conclusion
+
+_grimoire_ represents a significant advancement in AI driven developer assistance, providing context aware support that aids in navigating complex software projects. Its privacy conscious, modular design positions it as a valuable tool for developers seeking efficient onboarding and project comprehension. As technology continues to evolve, _grimoire_ is set to become a pivotal asset in modern software development, simplifying onboarding and boosting productivity from day one.
+
+Whether you're a seasoned developer or new to a project, _grimoire_ offers a practical solution to the common challenges of software onboarding, empowering you to quickly understand and contribute to unfamiliar codebases. Explore _grimoire_ and elevate your developer experience today.
